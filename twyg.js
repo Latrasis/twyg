@@ -104,41 +104,96 @@ function Twyg_parse(input) {
 // This is where we start Initiating the Element with the Given Property
 function Twyg_edit(e_input,p_input,u_input) {
 
-	// Error Checking...
-	alert(e_input+"  |   "+p_input+"  |  "+u_input);
-
-	var $element = $(e_input);
+	var $element = $(""+e_input+"");
 	var $property = p_input;
 	var $unit = u_input;
 
-	// Here we start picking out what the Property actually is and how we respond to it - i.e what "Bones" we show
-	// The Responses will return appropriate "Bones" which allow to edit the element with the mouse
-	var $property_type = function () {
+	// Retrieve Element Properties
+	var $p_width = $element.css("width").split("px")[0];
+	var $p_height = $element.css("height").split("px")[0];
+	var $p_margin_t = $element.css("margin-top").split("px")[0];
+	var $p_margin_r = $element.css("margin-right").split("px")[0];
+	var $p_margin_b = $element.css("margin-bottom").split("px")[0];
+	var $p_margin_l = $element.css("margin-left").split("px")[0];
 
-		// Margin Property
-		if ($property == "margin") {}
-		if ($property == "margin-left") {return bones_margin_left();}
-		if ($property == "margin-right") {return bones_margin_right();}
-		if ($property == "margin-bottom") {return bones_margin_bottom();}
-		if ($property == "margin-top") {return bones_margin_top();}
+	// Here we start picking out what the Property actually is and what Bounding Boxes we show
+	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
 
-		// Padding Property
-		if ($property == "padding") {return bones_padding_all();}
-		if ($property == "padding-left") {return bones_padding_left();}
-		if ($property == "padding-right") {return bones_padding_right();}
-		if ($property == "padding-bottom") {return bones_padding_bottom();}
-		if ($property == "padding-top") {return bones_padding_top();}
+	// Margin Property
+	if ($property == "margin") {bbox_margin("all")}
+	if ($property == "margin-left") {bbox_margin("left");}
+	if ($property == "margin-right") {bbox_margin("right");}
+	if ($property == "margin-bottom") {bbox_margin("bottom");}
+	if ($property == "margin-top") {bbox_margin("top");}
 
-		// Height and Width Properties
-		if ($property == "height") {return bones_height();}
-		if ($property == "width") {return bones_width();}
+	// Padding Property
+	if ($property == "padding") {bbox_padding("all")}
+	if ($property == "padding-left") {bbox_padding("left");}
+	if ($property == "padding-right") {bbox_padding("right");}
+	if ($property == "padding-bottom") {bbox_padding("bottom");}
+	if ($property == "padding-top") {bbox_padding("top");}
 
-		// Letter/Font Properties
-		if ($property == "font-size") {return bones_fontsize();}
-		if ($property == "word-spacing") {return bones_wordspacing();}
-		if ($property == "letter-spacing") {return bones_letterspacing();}
+	// Height and Width Properties
+	if ($property == "height") {bbox_height();}
+	if ($property == "width") {bbox_width();}
 
-	} 
+	// Letter/Font Properties
+	if ($property == "font-size") {bbox_fontsize();}
+	if ($property == "word-spacing") {bbox_wordspacing();}
+	if ($property == "letter-spacing") {bbox_letterspacing();}
+
+
+	// Bounding Box Functions
+	// Margin Bounding Box
+	function bbox_margin(side) {
+
+		// Scaffold Back of the BBox
+
+		$element.prepend('<div id="twyg_bbox"></div>');
+		$element.css({'position':'relative'});
+
+		var $bbox_back = $('#twyg_bbox');
+		$bbox_back.css({
+			"box-sizing":"border-box",
+			"position":"absolute",
+
+			"margin":"0px",
+			"margin-left": "-" + $p_margin_l + "px",
+			"margin-top": "-" + $p_margin_t + "px",
+			"width": (+$p_width + +$p_margin_r + +$p_margin_l) + "px",
+			"height":(+$p_height + +$p_margin_t + +$p_margin_b) + "px",
+			"border":"solid 1px rgba(33,33,33,0.1)"
+		});
+
+		// Add Box Anchors
+
+		// Insert Top Left "tl" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_tl class="twyg_bbox_anch"></div>');
+		var $bbox_anchor_tl = $('#twyg_bbox_anch_tl');
+
+		// Insert Top Right "tr" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_tr class="twyg_bbox_anch"></div>');
+		var $bbox_anchor_tr = $('#twyg_bbox_anch_tr');
+
+		// Insert Bottom Left "br" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_br class="twyg_bbox_anch"></div>');
+		var $bbox_anchor_br = $('#twyg_bbox_anch_br');
+
+		// Insert Bottom Right "bl" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_bl class="twyg_bbox_anch"></div>');
+		var $bbox_anchor_bl = $('#twyg_bbox_anch_bl');
+
+
+		
+
+
+
+
+
+	}
+
+	
+
 }
 
 
