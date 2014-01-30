@@ -1,0 +1,9 @@
+{
+  "name": "twyg",
+  "version": "0.0.1",
+  "authors": [
+    "Latrasis <jacobapayne@gmail.com>"
+  ],
+  "description": "Tweak What You Get Editor",
+  "license": "MIT"
+}
