@@ -134,32 +134,32 @@ function Twyg_bound(e_input,p_input,u_input) {
 	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
 
 	// Margin Property
-	if ($property == "margin") {bbox_margin("all")}
-	if ($property == "margin-left") {bbox_margin("left");}
-	if ($property == "margin-right") {bbox_margin("right");}
-	if ($property == "margin-bottom") {bbox_margin("bottom");}
-	if ($property == "margin-top") {bbox_margin("top");}
+	if ($property == "margin") {bbox_chng_margin("all")}
+	if ($property == "margin-left") {bbox_chng_margin("left");}
+	if ($property == "margin-right") {bbox_chng_margin("right");}
+	if ($property == "margin-bottom") {bbox_chng_margin("bottom");}
+	if ($property == "margin-top") {bbox_chng_margin("top");}
 
 	// Padding Property
-	if ($property == "padding") {bbox_padding("all")}
-	if ($property == "padding-left") {bbox_padding("left");}
-	if ($property == "padding-right") {bbox_padding("right");}
-	if ($property == "padding-bottom") {bbox_padding("bottom");}
-	if ($property == "padding-top") {bbox_padding("top");}
+	if ($property == "padding") {bbox_chng_padding("all")}
+	if ($property == "padding-left") {bbox_chng_padding("left");}
+	if ($property == "padding-right") {bbox_chng_padding("right");}
+	if ($property == "padding-bottom") {bbox_chng_padding("bottom");}
+	if ($property == "padding-top") {bbox_chng_padding("top");}
 
 	// Height and Width Properties
-	if ($property == "height") {bbox_height();}
-	if ($property == "width") {bbox_width();}
+	if ($property == "height") {bbox_chng_height();}
+	if ($property == "width") {bbox_chng_width();}
 
 	// Letter/Font Properties
-	if ($property == "font-size") {bbox_fontsize();}
-	if ($property == "word-spacing") {bbox_wordspacing();}
-	if ($property == "letter-spacing") {bbox_letterspacing();}
+	if ($property == "font-size") {bbox_chng_fontsize();}
+	if ($property == "word-spacing") {bbox_chng_wordspacing();}
+	if ($property == "letter-spacing") {bbox_chng_letterspacing();}
 
 
 	// Bounding Box Functions
 	// Margin Bounding Box
-	function bbox_margin(side) {
+	function bbox_chng_margin(side) {
 
 		// Scaffold Back of the BBox
 
@@ -248,56 +248,60 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		// Position the Anchors
 
-		var totalwidth = (+$p_width + +$p_margin_r + +$p_margin_l);
-		var totalheight = (+$p_height + +$p_margin_t + +$p_margin_b);
+		var bbox_width = (+$p_width + +$p_margin_r + +$p_margin_l);
+		var bbox_height = (+$p_height + +$p_margin_t + +$p_margin_b);
 
-		// Position Top Left "tl" Anchor
-		$bbox_anchor_tl.css({
-			"left":"-3"+"px",
-			"top":"-3"+"px",
-		});
+		PositionAnchors(bbox_width,bbox_height);
 
-		// Position Top Middle "tm" Anchor
-		$bbox_anchor_tm.css({
-			"left":totalwidth*0.5 + -"6"+"px",
-			"top":"-3"+"px",
-		});
-
-		// Position Top Right "tr" Anchor
-		$bbox_anchor_tr.css({
-			"left":totalwidth + -"6"+"px",
-			"top":"-3"+"px",
-		});
-
-		// Position Right Middle "rm" Anchor
-		$bbox_anchor_rm.css({
-			"left":totalwidth + -"6"+"px",
-			"top":totalheight*0.5+ -"6" +"px",
-		});
-
-		// Position Left Middle "lm" Anchor
-		$bbox_anchor_lm.css({
-			"left":"-3"+"px",
-			"top":totalheight*0.5+ -"6" +"px",
-		});
-
-		// Position Bottom Right "br" Anchor
-		$bbox_anchor_br.css({
-			"left":totalwidth + -"6"+"px",
-			"top":totalheight+ -"6" +"px",
-		});
-
-		// Position Bottom Middle "bm" Anchor
-		$bbox_anchor_bm.css({
-			"left":totalwidth*0.5 + -"6"+"px",
-			"top":totalheight+ -"6" +"px",
-		});
-
-		// Position Bottom Left "bl" Anchor
-		$bbox_anchor_bl.css({
-			"left":"-3"+"px",
-			"top":totalheight+ -"6" +"px",
-		});
+		function PositionAnchors(bbox_width,bbox_height) {
+				// Position Top Left "tl" Anchor
+				$bbox_anchor_tl.css({
+					"left":"-3"+"px",
+					"top":"-3"+"px",
+				});
+		
+				// Position Top Middle "tm" Anchor
+				$bbox_anchor_tm.css({
+					"left":bbox_width*0.5 + -"6"+"px",
+					"top":"-3"+"px",
+				});
+		
+				// Position Top Right "tr" Anchor
+				$bbox_anchor_tr.css({
+					"left":bbox_width + -"6"+"px",
+					"top":"-3"+"px",
+				});
+		
+				// Position Right Middle "rm" Anchor
+				$bbox_anchor_rm.css({
+					"left":bbox_width + -"6"+"px",
+					"top":bbox_height*0.5+ -"6" +"px",
+				});
+		
+				// Position Left Middle "lm" Anchor
+				$bbox_anchor_lm.css({
+					"left":"-3"+"px",
+					"top":bbox_height*0.5+ -"6" +"px",
+				});
+		
+				// Position Bottom Right "br" Anchor
+				$bbox_anchor_br.css({
+					"left":bbox_width + -"6"+"px",
+					"top":bbox_height+ -"6" +"px",
+				});
+		
+				// Position Bottom Middle "bm" Anchor
+				$bbox_anchor_bm.css({
+					"left":bbox_width*0.5 + -"6"+"px",
+					"top":bbox_height+ -"6" +"px",
+				});
+		
+				// Position Bottom Left "bl" Anchor
+				$bbox_anchor_bl.css({
+					"left":"-3"+"px",
+					"top":bbox_height+ -"6" +"px",
+				});
+			}
 
 
 		// Margin BBox Static Behavoir
@@ -322,11 +326,39 @@ function Twyg_bound(e_input,p_input,u_input) {
 				}
 			);
 
-		// Margin Bbox Dynamic Behavoir (Fun Part)
-		$bbox_anchor_bm
-			.mousedown(function() {
+		//Dynamic Behavoir
+
+		function changeX(anchor,element,event) {
+			var elementX = element.offset().left;
+			var anchorX = anchor.css("left");
+			var anchorX = anchorX.split("px")[0] + event.PageX+ "px";
+			alert(event.PageX);
+		}
+
+		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
+		$bbox_anchor_bm.mousedown(function(e) {
+				var anchor = $bbox_anchor_bm;
+				e.preventDefault();
 			    $(document).mousemove(function(e) {
-			        $element.css("height",e.PageY+2);
+			    	// Change the Element's Margin
+				    var elementY = $element.offset().top;
+					var elementH = +$element.css("height").split("px")[0] + +$element.css("padding-top").split("px")[0] + +$element.css("padding-bottom").split("px")[0];
+
+					var $new_margin_b = (+e.originalEvent.pageY + -(+elementY + +elementH)) + "px";
+					$element.css({"margin-bottom":$new_margin_b});
+
+					// Change the Bounding Box Height
+
+					var bboxY = $bbox_back.offset().top;
+
+					var $new_bbox_height = (+e.originalEvent.pageY + -bboxY);
+					bbox_height = $new_bbox_height;
+					$bbox_back.css({"height":$new_bbox_height+"px"});
+
+					// Refresh Anchor Positions
+
+					PositionAnchors(bbox_width,bbox_height);
+
 			    });
 			});
 		$(document).mouseup(function(e){
