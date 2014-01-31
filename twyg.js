@@ -322,7 +322,16 @@ function Twyg_bound(e_input,p_input,u_input) {
 				}
 			);
 
-		
+		// Margin Bbox Dynamic Behavoir (Fun Part)
+		$bbox_anchor_bm
+			.mousedown(function() {
+			    $(document).mousemove(function(e) {
+			        $element.css("height",e.PageY+2);
+			    });
+			});
+		$(document).mouseup(function(e){
+	       	$(document).unbind('mousemove');
+       	});
 
 
 
