@@ -336,34 +336,55 @@ function Twyg_bound(e_input,p_input,u_input) {
 		}
 
 		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
-		$bbox_anchor_bm.mousedown(function(e) {
-				var anchor = $bbox_anchor_bm;
-				e.preventDefault();
-			    $(document).mousemove(function(e) {
-			    	// Change the Element's Margin
-				    var elementY = $element.offset().top;
-					var elementH = +$element.css("height").split("px")[0] + +$element.css("padding-top").split("px")[0] + +$element.css("padding-bottom").split("px")[0];
+		// Y Axis Edit Behavoir
 
-					var $new_margin_b = (+e.originalEvent.pageY + -(+elementY + +elementH)) + "px";
-					$element.css({"margin-bottom":$new_margin_b});
+		EditY($bbox_anchor_bm,"margin-bottom");
+		EditY($bbox_anchor_tm,"margin-top");
 
-					// Change the Bounding Box Height
+		function EditY(selected_anchor,selected_property) {
+			selected_anchor.mousedown(function(e) {
+					e.preventDefault();
+				    $(document).mousemove(function(e) {
 
-					var bboxY = $bbox_back.offset().top;
+				    	// Change the Element's Margin
 
-					var $new_bbox_height = (+e.originalEvent.pageY + -bboxY);
-					bbox_height = $new_bbox_height;
-					$bbox_back.css({"height":$new_bbox_height+"px"});
+					    var elementY = $element.offset().top;
+						var elementH = +$element.css("height").split("px")[0] + +$element.css("padding-top").split("px")[0] + +$element.css("padding-bottom").split("px")[0];
+						// Find which Property is Selected
+						if (selected_property == "margin-bottom") {
+							var $new_property = (+e.originalEvent.pageY + -(+elementY + +elementH));}
 
-					// Refresh Anchor Positions
+						if (selected_property == "margin-top") {
+							var $new_property = (-e.originalEvent.pageY + +elementY);}
 
-					PositionAnchors(bbox_width,bbox_height);
+						$element.css(selected_property, $new_property + "px");
+		
+						// Change the Bounding Box Height
+		
+						var bboxY = $bbox_back.offset().top;
+						// Find which Anchor is Used
+						if (selected_anchor == $bbox_anchor_bm) {
+							var $new_bbox_height = +e.originalEvent.pageY + (-p_margin_b + -elementH);}
 
-			    });
-			});
-		$(document).mouseup(function(e){
-	       	$(document).unbind('mousemove');
-       	});
+						bbox_height = $new_bbox_height;
+						$bbox_back.css({"height":$new_bbox_height+"px"});
+		
+						// Refresh Anchor Positions
+		
+						PositionAnchors(bbox_width,bbox_height);
+		
+				    });
+				});
+
+			$(document).mouseup(function(e){
+		       	$(document).unbind('mousemove');
+	       	});
+		}
+
+
+		
+
+		
 
 
 
