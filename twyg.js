@@ -8,12 +8,11 @@
  * Date: 2014-01-29
  */
 
-// Define Twyg Console
-var Twyg_show = function() {
-	$("body")
-		.prepend('<input type="text" id="twyg"></input>')
-		.css('position','relative');
 
+// ******* Styling ******* //
+
+// Console Style
+function style_console() {
 	$("#twyg").css({
 		'width':'40%',
 		'height':'auto',
@@ -28,6 +27,13 @@ var Twyg_show = function() {
 		'left':'20px',
 		'border':'none'
 	});
+}
+
+var Twyg_show = function() {
+	$("body")
+		.prepend('<input type="text" id="twyg"></input>')
+		.css('position','relative');
+	style_console();
 	$('#twyg').toggle();
 }
 
@@ -43,23 +49,30 @@ var Twyg_toggle = function() {
 	text_input.select ();
 }
 
+// Using Mousetrap.js let's Bind the view of the Twyg Console to the Keystroke Capital "T"
+Mousetrap.bind('P',function () { Twyg_toggle(); });
+
 // Actions on What to do on Pressing either "Enter" or "Esc"
+
+$("body").keypress(function(e) {
+	// By Pressing "Esc" the Console is Toggled if Visible
+	// If the Console is not visible though any Bounding Boxes are Removed
+	if (e.keyCode == 27) {
+		if ($('#twyg').is(':hidden')) {$("#twyg_bbox").remove()};
+		if ($('#twyg').is(':visible')) {$("#twyg").toggle()};
+	};
+});
 
 $("#twyg").keypress(function (e) {
 	var Twyg_input = $("#twyg").val();
 // By Pressing "Enter" the Field Content is Passed to the Parsing Function
   if (e.which == 13) {
     $("#twyg").submit();
+    // If a Bounding Box already Exists we delete it
+    if ($("#twyg_bbox").length > 0) { $("#twyg_bbox").remove();} 
     Twyg_parse(Twyg_input);
   }
-// By Pressing "Esc" the Twyg Console is Hidden
-  if (e.keyCode == 27) {
-  	$('#twyg').toggle();
-  }
 });
-
-// Using Mousetrap.js let's Bind the view of the Twyg Console to the Keystroke Capital "T"
-Mousetrap.bind('T',function () { Twyg_toggle(); });
 
 
 // Parse the Contents of the Input
@@ -88,7 +101,8 @@ function Twyg_parse(input) {
 			$('#twyg').toggle();
 
 			// And Pass the Element Input & Property Input to the Twyg Editor
-			return Twyg_edit(e_input,p_input,u_input);
+			return Twyg_bound(e_input,p_input,u_input);
+
 	}
 
 	// Again For Now For Everything Else We Simply Respond With a "Nope" Animation
@@ -102,7 +116,7 @@ function Twyg_parse(input) {
 }
 
 // This is where we start Initiating the Element with the Given Property
-function Twyg_edit(e_input,p_input,u_input) {
+function Twyg_bound(e_input,p_input,u_input) {
 
 	var $element = $(""+e_input+"");
 	var $property = p_input;
@@ -158,8 +172,8 @@ function Twyg_edit(e_input,p_input,u_input) {
 			"position":"absolute",
 
 			"margin":"0px",
-			"margin-left": "-" + $p_margin_l + "px",
-			"margin-top": "-" + $p_margin_t + "px",
+			"margin-left": -$p_margin_l + "px",
+			"margin-top": -$p_margin_t + "px",
 			"width": (+$p_width + +$p_margin_r + +$p_margin_l) + "px",
 			"height":(+$p_height + +$p_margin_t + +$p_margin_b) + "px",
 			"border":"solid 1px rgba(33,33,33,0.1)"
@@ -168,30 +182,151 @@ function Twyg_edit(e_input,p_input,u_input) {
 		// Add Box Anchors
 
 		// Insert Top Left "tl" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_tl class="twyg_bbox_anch"></div>');
+		$bbox_back.append('<div id="twyg_bbox_anch_tl" class=twyg_bbox_anch"></div>');
 		var $bbox_anchor_tl = $('#twyg_bbox_anch_tl');
 
+		// Insert Top Middle "tm" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_tm" class=twyg_bbox_anch"></div>');
+		var $bbox_anchor_tm = $('#twyg_bbox_anch_tm');
+
 		// Insert Top Right "tr" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_tr class="twyg_bbox_anch"></div>');
+		$bbox_back.append('<div id="twyg_bbox_anch_tr" class=twyg_bbox_anch"></div>');
 		var $bbox_anchor_tr = $('#twyg_bbox_anch_tr');
 
+		// Insert Right Middle "rm" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_rm" class=twyg_bbox_anch"></div>');
+		var $bbox_anchor_rm = $('#twyg_bbox_anch_rm');
+
+		// Insert Left Middle "lm" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_lm" class=twyg_bbox_anch"></div>');
+		var $bbox_anchor_lm = $('#twyg_bbox_anch_lm');
+
 		// Insert Bottom Left "br" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_br class="twyg_bbox_anch"></div>');
+		$bbox_back.append('<div id="twyg_bbox_anch_br" class=twyg_bbox_anch"></div>');
 		var $bbox_anchor_br = $('#twyg_bbox_anch_br');
 
+		// Insert Bottom Middle "bm" Anchor
+		$bbox_back.append('<div id="twyg_bbox_anch_bm" class=twyg_bbox_anch"></div>');
+		var $bbox_anchor_bm = $('#twyg_bbox_anch_bm');
+
 		// Insert Bottom Right "bl" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_bl class="twyg_bbox_anch"></div>');
+		$bbox_back.append('<div id="twyg_bbox_anch_bl" class=twyg_bbox_anch"></div>');
 		var $bbox_anchor_bl = $('#twyg_bbox_anch_bl');
 
+		// Style All Anchors Function
+		function Anchors_css(style) {
+			// Style Top Left "tl" Anchor
+			$bbox_anchor_tl.css(style);
+			// Style Top Middle "tm" Anchor
+			$bbox_anchor_tm.css(style);
+			// Style Top Right "tr" Anchor
+			$bbox_anchor_tr.css(style);
+
+			// Style Right Middle "rm" Anchor
+			$bbox_anchor_rm.css(style);
+			// Style Left Middle "lm" Anchor
+			$bbox_anchor_lm.css(style);
+
+			// Style Bottom Right "br" Anchor
+			$bbox_anchor_br.css(style);
+			// Style Bottom Middle "bm" Anchor
+			$bbox_anchor_bm.css(style);
+			// Style Bottom Left "bl" Anchor
+			$bbox_anchor_bl.css(style);
+		}
+
+		// Style the Anchors
+		var $bbox_anchor_styles = {
+			"position":"absolute",
+			"width": "6px",
+			"height":"6px",
+			"background-color":"#fff",
+			"border":"solid 1px rgba(33,33,33,0.8)"
+		}
+
+		Anchors_css($bbox_anchor_styles);
+
+		// Position the Anchors
+
+		var totalwidth = (+$p_width + +$p_margin_r + +$p_margin_l);
+		var totalheight = (+$p_height + +$p_margin_t + +$p_margin_b);
+
+		// Position Top Left "tl" Anchor
+		$bbox_anchor_tl.css({
+			"left":"-3"+"px",
+			"top":"-3"+"px",
+		});
+
+		// Position Top Middle "tm" Anchor
+		$bbox_anchor_tm.css({
+			"left":totalwidth*0.5 + -"6"+"px",
+			"top":"-3"+"px",
+		});
+
+		// Position Top Right "tr" Anchor
+		$bbox_anchor_tr.css({
+			"left":totalwidth + -"6"+"px",
+			"top":"-3"+"px",
+		});
+
+		// Position Right Middle "rm" Anchor
+		$bbox_anchor_rm.css({
+			"left":totalwidth + -"6"+"px",
+			"top":totalheight*0.5+ -"6" +"px",
+		});
+
+		// Position Left Middle "lm" Anchor
+		$bbox_anchor_lm.css({
+			"left":"-3"+"px",
+			"top":totalheight*0.5+ -"6" +"px",
+		});
+
+		// Position Bottom Right "br" Anchor
+		$bbox_anchor_br.css({
+			"left":totalwidth + -"6"+"px",
+			"top":totalheight+ -"6" +"px",
+		});
+
+		// Position Bottom Middle "bm" Anchor
+		$bbox_anchor_bm.css({
+			"left":totalwidth*0.5 + -"6"+"px",
+			"top":totalheight+ -"6" +"px",
+		});
+
+		// Position Bottom Left "bl" Anchor
+		$bbox_anchor_bl.css({
+			"left":"-3"+"px",
+			"top":totalheight+ -"6" +"px",
+		});
+
+
+		// Margin BBox Static Behavoir
+		$("#twyg_bbox div")
+			.hover(
+				function() {
+					// $bbox_back.css({'border-bottom':'solid 1px #333'});
+					$(this).css({"background-color":'grey'});
+				},
+				function() {
+					$(this).css({"background-color":'white'});
+				}
+			)
+			.mousedown (
+				function() {
+					$(this).css({"background-color":'black'});
+				}
+			)
+			.mouseup (
+				function() {
+					$(this).css({"background-color":'grey'});
+				}
+			);
 
 		
 
 
 
-
-
 	}
-
 	
 
 }
