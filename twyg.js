@@ -344,6 +344,9 @@ function Twyg_bound(e_input,p_input,u_input) {
 		function EditY(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
 					e.preventDefault();
+					$bbox_back.css('border-color','blue');
+					Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
+
 				    $(document).mousemove(function(e) {
 
 				    	// Change the Element's Margin
@@ -355,16 +358,18 @@ function Twyg_bound(e_input,p_input,u_input) {
 							var $new_property = (+e.originalEvent.pageY + -(+elementY + +elementH));}
 
 						if (selected_property == "margin-top") {
-							var $new_property = (-e.originalEvent.pageY + +elementY);}
+							var $new_property = (-e.originalEvent.pageY + +elementY + +$p_margin_t);}
 
 						$element.css(selected_property, $new_property + "px");
-		
+
 						// Change the Bounding Box Height
 		
 						var bboxY = $bbox_back.offset().top;
 						// Find which Anchor is Used
 						if (selected_anchor == $bbox_anchor_bm) {
-							var $new_bbox_height = +e.originalEvent.pageY + (-p_margin_b + -elementH);}
+							var $new_bbox_height = (+e.originalEvent.pageY + -bboxY);}
+						if (selected_anchor == $bbox_anchor_tm) {
+							var $new_bbox_height = (-e.originalEvent.pageY + +bboxY + +bboxY +elementH );}
 
 						bbox_height = $new_bbox_height;
 						$bbox_back.css({"height":$new_bbox_height+"px"});
@@ -378,6 +383,8 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 			$(document).mouseup(function(e){
 		       	$(document).unbind('mousemove');
+		       	$bbox_back.css('border-color','#333');
+				Anchors_css({"border" :"solid 1px rgba(33,33,33,0.8)"});
 	       	});
 		}
 

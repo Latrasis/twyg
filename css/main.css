@@ -1,0 +1,186 @@
+@import url(default.css);
+@import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700|Montserrat:400,700);
+
+/* Base Styles */
+html {
+	box-model:border-box;
+}
+
+h1,h2,h3 {font-family: Montserrat, Gotham, Arial, sans-serif;}
+p,a,h4,h5 {font-family: Inconsolata, monospace;}
+
+h1,h2,h3 {font-weight: 700;}
+p,a,h5 {font-weight: 500;}
+h4 {font-weight: 600;}
+
+p, a {
+	font-size: 1em;
+}
+
+a {
+	color: #afafaf;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #333;
+	text-decoration: underline;
+}
+
+
+
+/* Layout Rules */
+
+body {
+	padding-top:70px;
+	padding-bottom: 0px;
+	position: relative;
+	z-index: 0;
+}
+
+section {
+	margin: 0px;
+	padding: 70px 0px;
+}
+
+#main {
+	position:relative;
+	z-index: 1;
+}
+#footerwrap {
+	position:fixed;
+	z-index: -1;
+	right:0px;
+	left: 0px;
+	bottom:0px;
+}
+footer.contact {position:relative; z-index: -2;}
+
+/* Header Module Rules */
+
+header.top {
+	width:auto;
+	height:auto;
+	padding: 10px 30px 20px 30px;
+	background-color: #fff;
+	color:#fff;
+}
+
+header.top h1 {
+	font-size: 1.5em;
+	text-transform: uppercase;
+	display: inline-block;
+	color:#333;
+}
+
+header.top h1:hover {}
+
+
+header.top nav.top_nav {
+	display: inline-block;
+	float:right;
+	position: relative;
+	top:20px;
+	right:30px;
+	font-size: 1.2em;
+	color:#fff;
+}
+
+header.top nav.top_nav li {
+	display: inline-block;
+	margin-left: 0.5em;
+}
+
+header.top nav.top_nav a {
+}
+
+header.top nav.top_nav a:hover {
+	color:#333;
+}
+
+/* About Section Module Rules */
+
+section.about {background-color: #fff;}
+section.about figure {}
+section.about img{
+	width:100px;
+	height:100px;
+	border-radius: 50%;
+	border: 5px solid #fafafa;
+
+}
+
+section.about h2 {
+	font-size: 3em;
+	line-height: 2.3ex;
+	position: relative;
+}
+
+/* Work Module Rules */
+
+section.work {
+	background-color: #fff;
+}
+section.work a.workitem {
+	margin:20px 0px;
+	display: inline-block;
+	text-align: center;
+	cursor: default;
+}
+
+section.work figure {
+	margin:0px auto;
+	margin-bottom: 20px;
+}
+
+section.work figure img {
+	margin:0px -50px;
+	max-width: 270px;
+	max-height:300px;
+	cursor: pointer;
+}
+
+section.work img:hover h4 {
+	color:#333;
+}
+
+section.work a.workitem:hover {
+	text-decoration: none;
+}
+
+a.workitem h4:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Presentation Module Rules */
+
+section.presentation {background-color: #fff;}
+section.presentation div.productwrap {margin-bottom: 100px;}
+div.productwrap img {
+	max-width: 100%;
+}
+
+div.productwrap aside {
+	margin-left: 0px;
+}
+
+
+/* Contact Module Rules */
+
+footer.contact {
+	text-align: center;
+	background-color: #fafafa;
+	padding: 0px;
+	height:370px;
+}
+
+footer.contact a {
+	font-size: 2.5em;
+}
+
+footer div.small-footer {
+	margin-top: 70px;
+	padding:10px 0px 2px;
+	background-color: #afafaf;
+}
