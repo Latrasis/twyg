@@ -1,41 +1,57 @@
 /*!
  * Twyg.js - Tweak What You Get | CSS Editor
- * N/A
+ * v0.0.2
  *
  * Copyright 2014, Jacob Payne and other contributors
  * Released under the MIT license
  *
- * Date: 2014-01-29
+ * Date: 2014-02-04
  */
 
 
 // ******* Styling ******* //
 
 // Console Style
-function style_console() {
-	$("#twyg").css({
-		'width':'40%',
-		'height':'auto',
-		'background-color':'rgba(200,200,200,0.8)',
-		'padding':'20px',
-		'color':'#333',
-		'font-size':'2em',
-		'font-family':'sans-serif',
-		'position':'absolute',
-		'z-index':'1000',
-		'top':'20px',
-		'left':'20px',
-		'border':'none'
-	});
-}
+
+var $console_styles = {
+	'width':'40%',
+	'height':'auto',
+	'background-color':'rgba(200,200,200,0.8)',
+	'padding':'20px',
+	'color':'#333',
+	'font-size':'2em',
+	'font-family':'sans-serif',
+	'position':'fixed',
+	'z-index':'1000',
+	'top':'20px',
+	'left':'20px',
+	'border':'none'
+};
+
+// Border Box Style + Anchor Style
+
+var $bbox_anchor_styles = {
+	"position":"absolute",
+	"width": "6px",
+	"height":"6px",
+	"background-color":"#fff",
+	"border":"solid 1px rgba(33,33,33,0.8)"
+};
+
+function style_console() {$("#twyg_console").css($console_styles);}
+function style_anchors() {$("#twyg_bbox").css($bbox_anchor_styles);}
+
+// Adding Twyg to the Body
 
 var Twyg_show = function() {
 	$("body")
-		.prepend('<input type="text" id="twyg"></input>')
+		.prepend('<div id="twyg"></div>')
 		.css('position','relative');
+	$("#twyg")
+		.prepend('<input type="text" id="twyg_console"></input>');
 	style_console();
-	$('#twyg').toggle();
-}
+	$('#twyg_console').toggle();
+};
 
 // Create Twyg Console On Page Load
 window.onLoad = Twyg_show();
@@ -43,11 +59,11 @@ window.onLoad = Twyg_show();
 // Toggle/Hide Twyg Console
 
 var Twyg_toggle = function() {
-	var text_input = $('#twyg');
+	var text_input = $('#twyg_console');
 	text_input.toggle();
 	text_input.focus ();
 	text_input.select ();
-}
+};
 
 // Using Mousetrap.js let's Bind the view of the Twyg Console to the Keystroke Capital "T"
 Mousetrap.bind('P',function () { Twyg_toggle(); });
@@ -58,36 +74,40 @@ $("body").keypress(function(e) {
 	// By Pressing "Esc" the Console is Toggled if Visible
 	// If the Console is not visible though any Bounding Boxes are Removed
 	if (e.keyCode == 27) {
-		if ($('#twyg').is(':hidden')) {$("#twyg_bbox").remove()};
-		if ($('#twyg').is(':visible')) {$("#twyg").toggle()};
-	};
+		if ($('#twyg_console').is(':hidden')) {$("#twyg_bbox").remove();}
+		if ($('#twyg_console').is(':visible')) {$("#twyg_console").toggle();}
+	}
 });
 
-$("#twyg").keypress(function (e) {
-	var Twyg_input = $("#twyg").val();
+$("#twyg_console").keypress(function (e) {
+	var Twyg_input = $("#twyg_console").val();
 // By Pressing "Enter" the Field Content is Passed to the Parsing Function
   if (e.which == 13) {
-    $("#twyg").submit();
+    $("#twyg_console").submit();
     // If a Bounding Box already Exists we delete it
-    if ($("#twyg_bbox").length > 0) { $("#twyg_bbox").remove();} 
+    if ($("#twyg_bbox").length > 0) { $("#twyg_bbox").remove();}
     Twyg_parse(Twyg_input);
   }
 });
 
+/********************Parse-Console-Input************************
 
-// Parse the Contents of the Input
-// See if a property is given to change or not
+Parse the Contents of the Input
+See if the Input is Valid, If the Property is Valid, If the Element is Given
+Then Pass the element to the Bounding-Box-Maker Function
+
+****************************************************************/
 
 function Twyg_parse(input) {
 
 	if (
 		// A Property is Defined and...
 		input.indexOf("{") != -1 
-		// ...there is only 1 property
+		//...there is only 1 property
 		&& input.split("{").length <= 2 
-		// ...there no more than 1 unit type
+		//...there no more than 1 unit type
 		&& input.split("/").length <= 2 
-		// ...the property is valid (future versions should have a validator - for now it's just true)
+		//...the property is valid (future versions should have a validator - for now it's just true)
 		&& true) {
 			// Since Jquery cannot parse properties we split the input accordingly
 			// Element Input for Jquery Parsing
@@ -115,7 +135,14 @@ function Twyg_parse(input) {
 	}
 }
 
-// This is where we start Initiating the Element with the Given Property
+
+/********************Bounding-Box-Creation**********************
+
+This is where we start Bound-Boxing the Element based on the Given Property
+
+****************************************************************/
+
+
 function Twyg_bound(e_input,p_input,u_input) {
 
 	var $element = $(""+e_input+"");
@@ -123,34 +150,44 @@ function Twyg_bound(e_input,p_input,u_input) {
 	var $unit = u_input;
 
 	// Retrieve Element Properties
-	var $p_width = $element.css("width").split("px")[0];
-	var $p_height = $element.css("height").split("px")[0];
-	var $p_margin_t = $element.css("margin-top").split("px")[0];
-	var $p_margin_r = $element.css("margin-right").split("px")[0];
-	var $p_margin_b = $element.css("margin-bottom").split("px")[0];
-	var $p_margin_l = $element.css("margin-left").split("px")[0];
+	var $e_width = $element.css("width").split("px")[0];
+	var $e_height = $element.css("height").split("px")[0];
+
+	var $e_margin_t = $element.css("margin-top").split("px")[0];
+	var $e_margin_r = $element.css("margin-right").split("px")[0];
+	var $e_margin_b = $element.css("margin-bottom").split("px")[0];
+	var $e_margin_l = $element.css("margin-left").split("px")[0];
+
+	var $e_padding_t = $element.css("padding-top").split("px")[0];
+	var $e_padding_r = $element.css("padding-right").split("px")[0];
+	var $e_padding_b = $element.css("padding-bottom").split("px")[0];
+	var $e_padding_l = $element.css("padding-left").split("px")[0];
+
+	// Retrieve Element Position
+	var $e_top = $element.offset().top;
+	var $e_left = $element.offset().left;
 
 	// Here we start picking out what the Property actually is and what Bounding Boxes we show
 	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
 
+	// Height and Width Properties
+	if ($property == "height") {bbox_chng_height();}
+	if ($property == "width") {bbox_chng_width();}
+
 	// Margin Property
-	if ($property == "margin") {bbox_chng_margin("all")}
+	if ($property == "margin") {bbox_chng_margin("all");}
 	if ($property == "margin-left") {bbox_chng_margin("left");}
 	if ($property == "margin-right") {bbox_chng_margin("right");}
 	if ($property == "margin-bottom") {bbox_chng_margin("bottom");}
 	if ($property == "margin-top") {bbox_chng_margin("top");}
 
 	// Padding Property
-	if ($property == "padding") {bbox_chng_padding("all")}
+	if ($property == "padding") {bbox_chng_padding("all");}
 	if ($property == "padding-left") {bbox_chng_padding("left");}
 	if ($property == "padding-right") {bbox_chng_padding("right");}
 	if ($property == "padding-bottom") {bbox_chng_padding("bottom");}
 	if ($property == "padding-top") {bbox_chng_padding("top");}
-
-	// Height and Width Properties
-	if ($property == "height") {bbox_chng_height();}
-	if ($property == "width") {bbox_chng_width();}
-
+	
 	// Letter/Font Properties
 	if ($property == "font-size") {bbox_chng_fontsize();}
 	if ($property == "word-spacing") {bbox_chng_wordspacing();}
@@ -172,10 +209,10 @@ function Twyg_bound(e_input,p_input,u_input) {
 			"position":"absolute",
 
 			"margin":"0px",
-			"margin-left": -$p_margin_l + "px",
-			"margin-top": -$p_margin_t + "px",
-			"width": (+$p_width + +$p_margin_r + +$p_margin_l) + "px",
-			"height":(+$p_height + +$p_margin_t + +$p_margin_b) + "px",
+			"margin-left": -$e_margin_l + "px",
+			"margin-top": -$e_margin_t + "px",
+			"width": (+$e_width + +$e_margin_r + +$e_margin_l) + "px",
+			"height":(+$e_height + +$e_margin_t + +$e_margin_b) + "px",
 			"border":"solid 1px rgba(33,33,33,0.1)"
 		});
 
@@ -248,8 +285,8 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		// Position the Anchors
 
-		var bbox_width = (+$p_width + +$p_margin_r + +$p_margin_l);
-		var bbox_height = (+$p_height + +$p_margin_t + +$p_margin_b);
+		var bbox_width = (+$e_width + +$e_margin_r + +$e_margin_l);
+		var bbox_height = (+$e_height + +$e_margin_t + +$e_margin_b);
 
 		PositionAnchors(bbox_width,bbox_height);
 
@@ -358,7 +395,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 							var $new_property = (+e.originalEvent.pageY + -(+elementY + +elementH));}
 
 						if (selected_property == "margin-top") {
-							var $new_property = (-e.originalEvent.pageY + +elementY + +$p_margin_t);}
+							var $new_property = (-e.originalEvent.pageY + +elementY + +$e_margin_t);}
 
 						$element.css(selected_property, $new_property + "px");
 
