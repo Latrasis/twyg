@@ -103,11 +103,11 @@ function Twyg_parse(input) {
 	if (
 		// A Property is Defined and...
 		input.indexOf("{") != -1 
-		//...there is only 1 property
-		&& input.split("{").length <= 2 
-		//...there no more than 1 unit type
+		//If there is only 1 property
+		&& input.split("{").length <= 2
+		//If there no more than 1 unit type
 		&& input.split("/").length <= 2 
-		//...the property is valid (future versions should have a validator - for now it's just true)
+		//If the property is valid (future versions should have a validator - for now it's just true)
 		&& true) {
 			// Since Jquery cannot parse properties we split the input accordingly
 			// Element Input for Jquery Parsing
@@ -118,7 +118,7 @@ function Twyg_parse(input) {
 			var u_input = input.split("/")[1];
 			
 			// Let's Also Hide the Twyg Console
-			$('#twyg').toggle();
+			$('#twyg_console').toggle();
 
 			// And Pass the Element Input & Property Input to the Twyg Editor
 			return Twyg_bound(e_input,p_input,u_input);
@@ -128,7 +128,7 @@ function Twyg_parse(input) {
 	// Again For Now For Everything Else We Simply Respond With a "Nope" Animation
 	// Future Versions should have a more wide range of responses
 	else {
-		$("#twyg")
+		$("#twyg_console")
 			.animate({'left':'10px'},70)
 			.animate({'left':'30px'},70)
 			.animate({'left':'20px'},70);
@@ -150,22 +150,26 @@ function Twyg_bound(e_input,p_input,u_input) {
 	var $unit = u_input;
 
 	// Retrieve Element Properties
-	var $e_width = $element.css("width").split("px")[0];
-	var $e_height = $element.css("height").split("px")[0];
+	var $elementproperties = {
+		e_width:$element.css("width").split("px")[0],
+		e_height:$element.css("height").split("px")[0],
 
-	var $e_margin_t = $element.css("margin-top").split("px")[0];
-	var $e_margin_r = $element.css("margin-right").split("px")[0];
-	var $e_margin_b = $element.css("margin-bottom").split("px")[0];
-	var $e_margin_l = $element.css("margin-left").split("px")[0];
+		e_margin_t:$element.css("margin-top").split("px")[0],
+		e_margin_r:$element.css("margin-right").split("px")[0],
+		e_margin_b:$element.css("margin-bottom").split("px")[0],
+		e_margin_l:$element.css("margin-left").split("px")[0],
 
-	var $e_padding_t = $element.css("padding-top").split("px")[0];
-	var $e_padding_r = $element.css("padding-right").split("px")[0];
-	var $e_padding_b = $element.css("padding-bottom").split("px")[0];
-	var $e_padding_l = $element.css("padding-left").split("px")[0];
+		e_padding_t:$element.css("padding-top").split("px")[0],
+		e_padding_r:$element.css("padding-right").split("px")[0],
+		e_padding_b:$element.css("padding-bottom").split("px")[0],
+		e_padding_l:$element.css("padding-left").split("px")[0],
 
-	// Retrieve Element Position
-	var $e_top = $element.offset().top;
-	var $e_left = $element.offset().left;
+		// Retrieve Element Position
+		e_top:$element.offset().top,
+		e_left:$element.offset().left,
+		e_right:$element.offset().right,
+		e_bottom:$element.offset().bottom,
+	};
 
 	// Here we start picking out what the Property actually is and what Bounding Boxes we show
 	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
@@ -198,57 +202,58 @@ function Twyg_bound(e_input,p_input,u_input) {
 	// Margin Bounding Box
 	function bbox_chng_margin(side) {
 
-		// Scaffold Back of the BBox
-
+		// Scaffold Back of the BBox within the Twyg Div
 		$element.prepend('<div id="twyg_bbox"></div>');
-		$element.css({'position':'relative'});
 
 		var $bbox_back = $('#twyg_bbox');
-		$bbox_back.css({
-			"box-sizing":"border-box",
-			"position":"absolute",
 
-			"margin":"0px",
-			"margin-left": -$e_margin_l + "px",
-			"margin-top": -$e_margin_t + "px",
-			"width": (+$e_width + +$e_margin_r + +$e_margin_l) + "px",
-			"height":(+$e_height + +$e_margin_t + +$e_margin_b) + "px",
-			"border":"solid 1px rgba(33,33,33,0.1)"
-		});
+		function PositionBbox(elementproperties) {
+			$bbox_back.css({
+				"box-sizing":"border-box",
+				"position":"absolute",
+				"margin":"0px",
+				"margin-left":-elementproperties.e_margin_l+"px",
+				"margin-top":-elementproperties.e_margin_t+"px",
+				"width": (+elementproperties.e_width + +elementproperties.e_margin_r + +elementproperties.e_margin_l + +elementproperties.e_padding_l + +elementproperties.e_padding_r) + "px",
+				"height":(+elementproperties.e_height + +elementproperties.e_margin_t + +elementproperties.e_margin_b + +elementproperties.e_padding_t + +elementproperties.e_padding_b) + "px",
+				"border":"solid 1px rgba(33,33,33,0.1)"
+			});
+		}
+
+		PositionBbox($elementproperties);
 
 		// Add Box Anchors
+		var Anchors_add = function() {
+			// Insert Top Left "tl" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_tl" class=twyg_bbox_anch"></div>');
+			// Insert Top Middle "tm" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_tm" class=twyg_bbox_anch"></div>');
+			// Insert Top Right "tr" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_tr" class=twyg_bbox_anch"></div>');
+			// Insert Right Middle "rm" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_rm" class=twyg_bbox_anch"></div>');
+			// Insert Left Middle "lm" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_lm" class=twyg_bbox_anch"></div>');
+			// Insert Bottom Left "br" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_br" class=twyg_bbox_anch"></div>');
+			// Insert Bottom Middle "bm" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_bm" class=twyg_bbox_anch"></div>');
+			// Insert Bottom Right "bl" Anchor
+			$bbox_back.append('<div id="twyg_bbox_anch_bl" class=twyg_bbox_anch"></div>');
+		};
 
-		// Insert Top Left "tl" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_tl" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_tl = $('#twyg_bbox_anch_tl');
+		Anchors_add();
 
-		// Insert Top Middle "tm" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_tm" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_tm = $('#twyg_bbox_anch_tm');
+		// Make Anchor Reference List
 
-		// Insert Top Right "tr" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_tr" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_tr = $('#twyg_bbox_anch_tr');
-
-		// Insert Right Middle "rm" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_rm" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_rm = $('#twyg_bbox_anch_rm');
-
-		// Insert Left Middle "lm" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_lm" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_lm = $('#twyg_bbox_anch_lm');
-
-		// Insert Bottom Left "br" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_br" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_br = $('#twyg_bbox_anch_br');
-
-		// Insert Bottom Middle "bm" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_bm" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_bm = $('#twyg_bbox_anch_bm');
-
-		// Insert Bottom Right "bl" Anchor
-		$bbox_back.append('<div id="twyg_bbox_anch_bl" class=twyg_bbox_anch"></div>');
-		var $bbox_anchor_bl = $('#twyg_bbox_anch_bl');
+		var $bbox_anchor_tl = $('#twyg_bbox_anch_tl'); // Top Left
+		var $bbox_anchor_tm = $('#twyg_bbox_anch_tm'); // Top Middle
+		var $bbox_anchor_tr = $('#twyg_bbox_anch_tr'); // Top Right
+		var $bbox_anchor_rm = $('#twyg_bbox_anch_rm'); // Right Middle
+		var $bbox_anchor_lm = $('#twyg_bbox_anch_lm'); // Left Middle
+		var $bbox_anchor_br = $('#twyg_bbox_anch_br'); // Bottom Right
+		var $bbox_anchor_bm = $('#twyg_bbox_anch_bm'); // Bottom Middle
+		var $bbox_anchor_bl = $('#twyg_bbox_anch_bl'); // Bottom Left
 
 		// Style All Anchors Function
 		function Anchors_css(style) {
@@ -273,24 +278,17 @@ function Twyg_bound(e_input,p_input,u_input) {
 		}
 
 		// Style the Anchors
-		var $bbox_anchor_styles = {
-			"position":"absolute",
-			"width": "6px",
-			"height":"6px",
-			"background-color":"#fff",
-			"border":"solid 1px rgba(33,33,33,0.8)"
-		}
-
 		Anchors_css($bbox_anchor_styles);
 
 		// Position the Anchors
 
-		var bbox_width = (+$e_width + +$e_margin_r + +$e_margin_l);
-		var bbox_height = (+$e_height + +$e_margin_t + +$e_margin_b);
+		PositionAnchors($elementproperties);
 
-		PositionAnchors(bbox_width,bbox_height);
+		function PositionAnchors(elementproperties) {
 
-		function PositionAnchors(bbox_width,bbox_height) {
+			var bbox_width = (+elementproperties.e_width + +elementproperties.e_margin_r + +elementproperties.e_margin_l + +elementproperties.e_padding_l + +elementproperties.e_padding_r);
+			var bbox_height = (+elementproperties.e_height + +elementproperties.e_margin_t + +elementproperties.e_margin_b + +elementproperties.e_padding_t + +elementproperties.e_padding_b);
+
 				// Position Top Left "tl" Anchor
 				$bbox_anchor_tl.css({
 					"left":"-3"+"px",
@@ -363,57 +361,69 @@ function Twyg_bound(e_input,p_input,u_input) {
 				}
 			);
 
-		//Dynamic Behavoir
-
-		function changeX(anchor,element,event) {
-			var elementX = element.offset().left;
-			var anchorX = anchor.css("left");
-			var anchorX = anchorX.split("px")[0] + event.PageX+ "px";
-			alert(event.PageX);
-		}
-
 		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
 		// Y Axis Edit Behavoir
 
 		EditY($bbox_anchor_bm,"margin-bottom");
 		EditY($bbox_anchor_tm,"margin-top");
 
+		$('#twyg').append('<div id="test"></div>');
+		$('#twyg').append('<div id="test2"></div>');
 		function EditY(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
 					e.preventDefault();
 					$bbox_back.css('border-color','blue');
 					Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
 
+					// TESTING
+					$('#twyg').text('Starting Point:' + startpointX + ',' + startpointY);
+
 				    $(document).mousemove(function(e) {
+				    	$('#test').text('Distance:' + +e.originalEvent.pageY + -startpointY);
 
 				    	// Change the Element's Margin
 
 					    var elementY = $element.offset().top;
 						var elementH = +$element.css("height").split("px")[0] + +$element.css("padding-top").split("px")[0] + +$element.css("padding-bottom").split("px")[0];
 						// Find which Property is Selected
+						var $change;
+
 						if (selected_property == "margin-bottom") {
-							var $new_property = (+e.originalEvent.pageY + -(+elementY + +elementH));}
+							var $change = (+e.originalEvent.pageY + -startpointY);}
 
 						if (selected_property == "margin-top") {
-							var $new_property = (-e.originalEvent.pageY + +elementY + +$e_margin_t);}
+							var $change = (-e.originalEvent.pageY + +startpointY);}
 
-						$element.css(selected_property, $new_property + "px");
+						$element.css(selected_property, +$change + +$element.css(selected_property).split("px")[0] + "px");
+						alert(+$change + +$element.css(selected_property).split("px")[0] + "px");
 
-						// Change the Bounding Box Height
-		
-						var bboxY = $bbox_back.offset().top;
-						// Find which Anchor is Used
-						if (selected_anchor == $bbox_anchor_bm) {
-							var $new_bbox_height = (+e.originalEvent.pageY + -bboxY);}
-						if (selected_anchor == $bbox_anchor_tm) {
-							var $new_bbox_height = (-e.originalEvent.pageY + +bboxY + +bboxY +elementH );}
+						// Update Element's Properties
+						var changed_elementproperties = {
+							e_width:$element.css("width").split("px")[0],
+							e_height:$element.css("height").split("px")[0],
 
-						bbox_height = $new_bbox_height;
-						$bbox_back.css({"height":$new_bbox_height+"px"});
-		
+							e_margin_t:$element.css("margin-top").split("px")[0],
+							e_margin_r:$element.css("margin-right").split("px")[0],
+							e_margin_b:$element.css("margin-bottom").split("px")[0],
+							e_margin_l:$element.css("margin-left").split("px")[0],
+
+							e_padding_t:$element.css("padding-top").split("px")[0],
+							e_padding_r:$element.css("padding-right").split("px")[0],
+							e_padding_b:$element.css("padding-bottom").split("px")[0],
+							e_padding_l:$element.css("padding-left").split("px")[0],
+
+							// Retrieve Element Position
+							e_top:$element.offset().top,
+							e_left:$element.offset().left,
+							e_right:$element.offset().right,
+							e_bottom:$element.offset().bottom,
+						};
+
+						// Retrieve Element Properties
+
 						// Refresh Anchor Positions
-		
-						PositionAnchors(bbox_width,bbox_height);
+						PositionBbox(changed_elementproperties);
+						PositionAnchors(changed_elementproperties);
 		
 				    });
 				});
