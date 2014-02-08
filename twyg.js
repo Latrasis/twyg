@@ -364,15 +364,11 @@ function Twyg_bound(e_input,p_input,u_input) {
 			);
 
 		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
-		// Y Axis Edit Behavoir
 
 		EditMargin($bbox_anchor_bm,"margin-bottom");
 		EditMargin($bbox_anchor_tm,"margin-top");
 		EditMargin($bbox_anchor_lm,"margin-left");
 		EditMargin($bbox_anchor_rm,"margin-right");
-
-		$('#twyg').append('<div id="test"></div>');
-		$('#twyg').append('<div id="test2"></div>');
 
 		function EditMargin(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
@@ -384,92 +380,83 @@ function Twyg_bound(e_input,p_input,u_input) {
 				$(document).mousemove(function(e) {
 					//check to make sure there is data to compare against
 					if (last_position.x !== undefined) {
+						
+						var change = function(selected_property,changeby) {
+							var i = +$element.css(selected_property).split("px")[0] + changeby + "px";
+							$element.css(selected_property,i);
+						};
+
 						//get the change from last position to this position
 						var deltaX = last_position.x - e.clientX,
 							deltaY = last_position.y - e.clientY;
 
 						if (deltaY >= 0){
 							if (selected_property == "margin-bottom") {
-								var change = +$element.css("margin-bottom").split("px")[0] + -1 + "px";
-								$element.css({"margin-bottom":change});
+								change("margin-bottom",-1);
 							}
 
 							if (selected_property == "margin-top") {
-								var change = +$element.css("margin-top").split("px")[0] + +1 + "px";
-								$element.css({"margin-top":change});
+								change("margin-top",+1);
 							}
-
 
 						}
 
 						if (deltaY < 0){
 							if (selected_property == "margin-bottom") {
-								var change = +$element.css("margin-bottom").split("px")[0] + +1 + "px";
-								$element.css({"margin-bottom":change});
+								change("margin-bottom",+1);
 							}
 							if (selected_property == "margin-top") {
-								var change = +$element.css("margin-top").split("px")[0] + -1 + "px";
-								$element.css({"margin-top":change});
+								change("margin-top",-1);
 							}
 						}
 
 						if (deltaX >= 0){
 							if (selected_property == "margin-right") {
-								var change = +$element.css("margin-right").split("px")[0] + -1 + "px";
-								$element.css({"margin-right":change});
+								change("margin-right",-1);
 							}
 
 							if (selected_property == "margin-left") {
-								var change = +$element.css("margin-left").split("px")[0] + +1 + "px";
-								$element.css({"margin-left":change});
+								change("margin-left",+1);
 							}
 
 						}
 
 						if (deltaX < 0){
 							if (selected_property == "margin-right") {
-								var change = +$element.css("margin-right").split("px")[0] + +1 + "px";
-								$element.css({"margin-right":change});
+								change("margin-right",+1);
 							}
 							if (selected_property == "margin-left") {
-								var change = +$element.css("margin-left").split("px")[0] + -1 + "px";
-								$element.css({"margin-left":change});
+								change("margin-left",-1);
 							}
 						}
-
-
-
-						
-
-						// Change the Element's Margin
-
-						// Update Element's Properties
-						var $elementproperties = {
-							e_width:$element.css("width").split("px")[0],
-							e_height:$element.css("height").split("px")[0],
-
-							e_margin_t:$element.css("margin-top").split("px")[0],
-							e_margin_r:$element.css("margin-right").split("px")[0],
-							e_margin_b:$element.css("margin-bottom").split("px")[0],
-							e_margin_l:$element.css("margin-left").split("px")[0],
-
-							e_padding_t:$element.css("padding-top").split("px")[0],
-							e_padding_r:$element.css("padding-right").split("px")[0],
-							e_padding_b:$element.css("padding-bottom").split("px")[0],
-							e_padding_l:$element.css("padding-left").split("px")[0],
-
-							// Retrieve Element Position
-							e_top:$element.offset().top,
-							e_left:$element.offset().left,
-							e_right:$element.offset().right,
-							e_bottom:$element.offset().bottom,
-						};
-
-						// Refresh Anchor Positions
-						PositionBbox($elementproperties);
-						PositionAnchors($elementproperties);
 						
 					}
+
+					// Update Element's Properties
+					var $elementproperties = {
+						e_width:$element.css("width").split("px")[0],
+						e_height:$element.css("height").split("px")[0],
+
+						e_margin_t:$element.css("margin-top").split("px")[0],
+						e_margin_r:$element.css("margin-right").split("px")[0],
+						e_margin_b:$element.css("margin-bottom").split("px")[0],
+						e_margin_l:$element.css("margin-left").split("px")[0],
+
+						e_padding_t:$element.css("padding-top").split("px")[0],
+						e_padding_r:$element.css("padding-right").split("px")[0],
+						e_padding_b:$element.css("padding-bottom").split("px")[0],
+						e_padding_l:$element.css("padding-left").split("px")[0],
+
+						// Retrieve Element Position
+						e_top:$element.offset().top,
+						e_left:$element.offset().left,
+						e_right:$element.offset().right,
+						e_bottom:$element.offset().bottom,
+					};
+
+					// Refresh Anchor Positions
+					PositionBbox($elementproperties);
+					PositionAnchors($elementproperties);
 
 					// set position for next time
 					last_position = {
