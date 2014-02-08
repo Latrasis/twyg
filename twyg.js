@@ -368,6 +368,8 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		EditMargin($bbox_anchor_bm,"margin-bottom");
 		EditMargin($bbox_anchor_tm,"margin-top");
+		EditMargin($bbox_anchor_lm,"margin-left");
+		EditMargin($bbox_anchor_rm,"margin-right");
 
 		$('#twyg').append('<div id="test"></div>');
 		$('#twyg').append('<div id="test2"></div>');
@@ -410,6 +412,32 @@ function Twyg_bound(e_input,p_input,u_input) {
 								$element.css({"margin-top":change});
 							}
 						}
+
+						if (deltaX >= 0){
+							if (selected_property == "margin-right") {
+								var change = +$element.css("margin-right").split("px")[0] + -1 + "px";
+								$element.css({"margin-right":change});
+							}
+
+							if (selected_property == "margin-left") {
+								var change = +$element.css("margin-left").split("px")[0] + +1 + "px";
+								$element.css({"margin-left":change});
+							}
+
+						}
+
+						if (deltaX < 0){
+							if (selected_property == "margin-right") {
+								var change = +$element.css("margin-right").split("px")[0] + +1 + "px";
+								$element.css({"margin-right":change});
+							}
+							if (selected_property == "margin-left") {
+								var change = +$element.css("margin-left").split("px")[0] + -1 + "px";
+								$element.css({"margin-left":change});
+							}
+						}
+
+
 
 						
 
