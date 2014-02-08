@@ -83,10 +83,10 @@ $("#twyg_console").keypress(function (e) {
 	var Twyg_input = $("#twyg_console").val();
 // By Pressing "Enter" the Field Content is Passed to the Parsing Function
   if (e.which == 13) {
-    $("#twyg_console").submit();
-    // If a Bounding Box already Exists we delete it
-    if ($("#twyg_bbox").length > 0) { $("#twyg_bbox").remove();}
-    Twyg_parse(Twyg_input);
+	$("#twyg_console").submit();
+	// If a Bounding Box already Exists we delete it
+	if ($("#twyg_bbox").length > 0) { $("#twyg_bbox").remove();}
+	Twyg_parse(Twyg_input);
   }
 });
 
@@ -150,6 +150,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 	var $unit = u_input;
 
 	// Retrieve Element Properties
+
 	var $elementproperties = {
 		e_width:$element.css("width").split("px")[0],
 		e_height:$element.css("height").split("px")[0],
@@ -170,6 +171,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 		e_right:$element.offset().right,
 		e_bottom:$element.offset().bottom,
 	};
+
 
 	// Here we start picking out what the Property actually is and what Bounding Boxes we show
 	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
@@ -369,36 +371,51 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		$('#twyg').append('<div id="test"></div>');
 		$('#twyg').append('<div id="test2"></div>');
+
 		function EditY(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
-					e.preventDefault();
-					$bbox_back.css('border-color','blue');
-					Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
+				e.preventDefault();
+				$bbox_back.css('border-color','blue');
+				Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
+				var last_position = ({});
 
-					// TESTING
-					$('#twyg').text('Starting Point:' + startpointX + ',' + startpointY);
+				$(document).mousemove(function(e) {
+					//check to make sure there is data to compare against
+					if (last_position.x !== undefined) {
+						//get the change from last position to this position
+						var deltaX = last_position.x - e.clientX,
+							deltaY = last_position.y - e.clientY;
 
-				    $(document).mousemove(function(e) {
-				    	$('#test').text('Distance:' + +e.originalEvent.pageY + -startpointY);
+						if (deltaY >= 0){
+							if (selected_property == "margin-bottom") {
+								var change = +$element.css("margin-bottom").split("px")[0] + -1 + "px";
+								$element.css({"margin-bottom":change});
+							}
+							if (selected_property == "margin-top") {
+								var change = +$element.css("margin-bottom").split("px")[0] + +1 + "px";
+								$element.css({"margin-bottom":change});
+							}
 
-				    	// Change the Element's Margin
 
-					    var elementY = $element.offset().top;
-						var elementH = +$element.css("height").split("px")[0] + +$element.css("padding-top").split("px")[0] + +$element.css("padding-bottom").split("px")[0];
-						// Find which Property is Selected
-						var $change;
+						}
 
-						if (selected_property == "margin-bottom") {
-							var $change = (+e.originalEvent.pageY + -startpointY);}
+						if (deltaY < 0){
+							if (selected_property == "margin-bottom") {
+								var change = +$element.css("margin-bottom").split("px")[0] + +1 + "px";
+								$element.css({"margin-bottom":change});
+							}
+							if (selected_property == "margin-top") {
+								var change = +$element.css("margin-bottom").split("px")[0] + -1 + "px";
+								$element.css({"margin-bottom":change});
+							}
+						}
 
-						if (selected_property == "margin-top") {
-							var $change = (-e.originalEvent.pageY + +startpointY);}
+						
 
-						$element.css(selected_property, +$change + +$element.css(selected_property).split("px")[0] + "px");
-						alert(+$change + +$element.css(selected_property).split("px")[0] + "px");
+						// Change the Element's Margin
 
 						// Update Element's Properties
-						var changed_elementproperties = {
+						var $elementproperties = {
 							e_width:$element.css("width").split("px")[0],
 							e_height:$element.css("height").split("px")[0],
 
@@ -419,28 +436,28 @@ function Twyg_bound(e_input,p_input,u_input) {
 							e_bottom:$element.offset().bottom,
 						};
 
-						// Retrieve Element Properties
-
 						// Refresh Anchor Positions
-						PositionBbox(changed_elementproperties);
-						PositionAnchors(changed_elementproperties);
-		
-				    });
+						PositionBbox($elementproperties);
+						PositionAnchors($elementproperties);
+						
+					}
+
+					// set position for next time
+					last_position = {
+						x : e.clientX,
+						y : e.clientY
+					};
+
+					
 				});
 
-			$(document).mouseup(function(e){
-		       	$(document).unbind('mousemove');
-		       	$bbox_back.css('border-color','#333');
-				Anchors_css({"border" :"solid 1px rgba(33,33,33,0.8)"});
-	       	});
+				$(document).mouseup(function(e){
+					$(document).unbind('mousemove');
+					$bbox_back.css('border-color','#333');
+					Anchors_css({"border" :"solid 1px rgba(33,33,33,0.8)"});
+				});
+			});
 		}
-
-
-		
-
-		
-
-
 
 	}
 	
