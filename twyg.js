@@ -366,13 +366,13 @@ function Twyg_bound(e_input,p_input,u_input) {
 		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
 		// Y Axis Edit Behavoir
 
-		EditY($bbox_anchor_bm,"margin-bottom");
-		EditY($bbox_anchor_tm,"margin-top");
+		EditMargin($bbox_anchor_bm,"margin-bottom");
+		EditMargin($bbox_anchor_tm,"margin-top");
 
 		$('#twyg').append('<div id="test"></div>');
 		$('#twyg').append('<div id="test2"></div>');
 
-		function EditY(selected_anchor,selected_property) {
+		function EditMargin(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
 				e.preventDefault();
 				$bbox_back.css('border-color','blue');
@@ -391,9 +391,10 @@ function Twyg_bound(e_input,p_input,u_input) {
 								var change = +$element.css("margin-bottom").split("px")[0] + -1 + "px";
 								$element.css({"margin-bottom":change});
 							}
+
 							if (selected_property == "margin-top") {
-								var change = +$element.css("margin-bottom").split("px")[0] + +1 + "px";
-								$element.css({"margin-bottom":change});
+								var change = +$element.css("margin-top").split("px")[0] + +1 + "px";
+								$element.css({"margin-top":change});
 							}
 
 
@@ -405,8 +406,8 @@ function Twyg_bound(e_input,p_input,u_input) {
 								$element.css({"margin-bottom":change});
 							}
 							if (selected_property == "margin-top") {
-								var change = +$element.css("margin-bottom").split("px")[0] + -1 + "px";
-								$element.css({"margin-bottom":change});
+								var change = +$element.css("margin-top").split("px")[0] + -1 + "px";
+								$element.css({"margin-top":change});
 							}
 						}
 
