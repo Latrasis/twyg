@@ -363,14 +363,14 @@ function Twyg_bound(e_input,p_input,u_input) {
 				}
 			);
 
-		// Margin Bbox Dynamic Behavoir Demo (Fun Part)
+		// Bbox Dynamic Behavoir 
 
-		EditMargin($bbox_anchor_bm,"margin-bottom");
-		EditMargin($bbox_anchor_tm,"margin-top");
-		EditMargin($bbox_anchor_lm,"margin-left");
-		EditMargin($bbox_anchor_rm,"margin-right");
+		EditElement($bbox_anchor_bm,"margin-bottom");
+		EditElement($bbox_anchor_tm,"margin-top");
+		EditElement($bbox_anchor_lm,"margin-left");
+		EditElement($bbox_anchor_rm,"margin-right");
 
-		function EditMargin(selected_anchor,selected_property) {
+		function EditElement(selected_anchor,selected_property) {
 			selected_anchor.mousedown(function(e) {
 				e.preventDefault();
 				$bbox_back.css('border-color','blue');
@@ -380,7 +380,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 				$(document).mousemove(function(e) {
 					//check to make sure there is data to compare against
 					if (last_position.x !== undefined) {
-						
+
 						var change = function(selected_property,changeby) {
 							var i = +$element.css(selected_property).split("px")[0] + changeby + "px";
 							$element.css(selected_property,i);
