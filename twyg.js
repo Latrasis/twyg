@@ -422,6 +422,10 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 					"border-radius":"2px"
 				});
 			},
+			color:function(type) {
+				if (type == "margin") {$("#mousepanel").css('background-color',"yellow");}
+				if (type == "padding") {$("#mousepanel").css('background-color',"red");}
+			},
 			position:function(e) {
 				$("#mousepanel").css({
 					"position":"absolute",
@@ -429,6 +433,7 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 					"top":+e.clientY + "px",
 				});
 			},
+
 			context:function(info) {
 				$("#mousepanel").text(info);
 			},
@@ -539,6 +544,8 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 
 					// Set Mouse Panel Info
 					$mousepanel.context(selected_property + " : " + $element.css(selected_property));
+					// Set Mouse Panel Color
+					// $mousepanel.color(type);
 
 
 					// set position for next time
