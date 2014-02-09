@@ -177,49 +177,81 @@ function Twyg_bound(e_input,p_input,u_input) {
 	// The Responses will return appropriate Bounding Box Functions which allow to edit the element with the mouse
 
 	// Height and Width Properties
-	if ($property == "height") {bbox_chng_height();}
-	if ($property == "width") {bbox_chng_width();}
+	if ($property == "height") {Twyg_edit("height");}
+	if ($property == "width") {Twyg_edit("width");}
 
 	// Margin Property
-	if ($property == "margin") {bbox_chng_margin("all");}
-	if ($property == "margin-left") {bbox_chng_margin("left");}
-	if ($property == "margin-right") {bbox_chng_margin("right");}
-	if ($property == "margin-bottom") {bbox_chng_margin("bottom");}
-	if ($property == "margin-top") {bbox_chng_margin("top");}
+	if ($property == "margin") {Twyg_edit("margin","all");}
+	if ($property == "margin-left") {Twyg_edit("margin","left");}
+	if ($property == "margin-right") {Twyg_edit("margin","right");}
+	if ($property == "margin-bottom") {Twyg_edit("margin","bottom");}
+	if ($property == "margin-top") {Twyg_edit("margin","top");}
 
 	// Padding Property
-	if ($property == "padding") {bbox_chng_padding("all");}
-	if ($property == "padding-left") {bbox_chng_padding("left");}
-	if ($property == "padding-right") {bbox_chng_padding("right");}
-	if ($property == "padding-bottom") {bbox_chng_padding("bottom");}
-	if ($property == "padding-top") {bbox_chng_padding("top");}
+	if ($property == "padding") {Twyg_edit("padding","all");}
+	if ($property == "padding-left") {Twyg_edit("padding","left");}
+	if ($property == "padding-right") {Twyg_edit("padding","right");}
+	if ($property == "padding-bottom") {Twyg_edit("padding","bottom");}
+	if ($property == "padding-top") {Twyg_edit("padding","top");}
 	
 	// Letter/Font Properties
-	if ($property == "font-size") {bbox_chng_fontsize();}
-	if ($property == "word-spacing") {bbox_chng_wordspacing();}
-	if ($property == "letter-spacing") {bbox_chng_letterspacing();}
+	if ($property == "font-size") {Twyg_edit("font-size");}
+	if ($property == "word-spacing") {Twyg_edit("word-spacing");}
+	if ($property == "letter-spacing") {Twyg_edit("letter-spacing");}
 
 
 	// Bounding Box Functions
 	// Margin Bounding Box
-	function bbox_chng_margin(side) {
+	function Twyg_edit(type,side) {
 
 		// Scaffold Back of the BBox within the Twyg Div
 		$element.prepend('<div id="twyg_bbox"></div>');
-
 		var $bbox_back = $('#twyg_bbox');
 
 		function PositionBbox(elementproperties) {
-			$bbox_back.css({
-				"box-sizing":"border-box",
-				"position":"absolute",
-				"margin":"0px",
-				"margin-left":-elementproperties.e_margin_l+"px",
-				"margin-top":-elementproperties.e_margin_t+"px",
-				"width": (+elementproperties.e_width + +elementproperties.e_margin_r + +elementproperties.e_margin_l + +elementproperties.e_padding_l + +elementproperties.e_padding_r) + "px",
-				"height":(+elementproperties.e_height + +elementproperties.e_margin_t + +elementproperties.e_margin_b + +elementproperties.e_padding_t + +elementproperties.e_padding_b) + "px",
-				"border":"solid 1px rgba(33,33,33,0.1)"
-			});
+
+			// Construct BBox For Height & Width
+			if (type == "height" || type == "width") {
+				$bbox_back.css({
+					"box-sizing":"border-box",
+					"position":"absolute",
+					"margin":"0px",
+					// "margin-left":-elementproperties.e_margin_l+ -elementproperties.e_padding_l + "px",
+					// "margin-top":-elementproperties.e_margin_t+ -elementproperties.e_padding_t + "px",
+					"width": +elementproperties.e_width  + "px",
+					"height":+elementproperties.e_height + "px",
+					"border":"solid 1px rgba(33,33,33,0.1)"
+				});
+			}
+
+			// Construct BBox For Margin
+			if (type == "margin") {
+				$bbox_back.css({
+					"box-sizing":"border-box",
+					"position":"absolute",
+					"margin":"0px",
+					"margin-left":-elementproperties.e_margin_l+ -elementproperties.e_padding_l + "px",
+					"margin-top":-elementproperties.e_margin_t+ -elementproperties.e_padding_t + "px",
+					"width": (+elementproperties.e_width + +elementproperties.e_margin_r + +elementproperties.e_margin_l + +elementproperties.e_padding_l + +elementproperties.e_padding_r) + "px",
+					"height":(+elementproperties.e_height + +elementproperties.e_margin_t + +elementproperties.e_margin_b + +elementproperties.e_padding_t + +elementproperties.e_padding_b) + "px",
+					"border":"solid 1px rgba(33,33,33,0.1)"
+				});
+			}
+
+			// Construct BBox for Margin
+			if (type == "padding") {
+				$bbox_back.css({
+					"box-sizing":"border-box",
+					"position":"absolute",
+					"margin":"0px",
+					"margin-left":-elementproperties.e_padding_l+"px",
+					"margin-top":-elementproperties.e_padding_t+"px",
+					"width": (+elementproperties.e_width + +elementproperties.e_padding_l + +elementproperties.e_padding_r) + "px",
+					"height":(+elementproperties.e_height + +elementproperties.e_padding_t + +elementproperties.e_padding_b) + "px",
+					"border":"solid 1px rgba(33,33,33,0.1)"
+				});
+			}
+
 		}
 
 		PositionBbox($elementproperties);
@@ -284,61 +316,62 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		// Position the Anchors
 
-		PositionAnchors($elementproperties);
+		PositionAnchors();
 
-		function PositionAnchors(elementproperties) {
+		function PositionAnchors() {
 
-			var bbox_width = (+elementproperties.e_width + +elementproperties.e_margin_r + +elementproperties.e_margin_l + +elementproperties.e_padding_l + +elementproperties.e_padding_r);
-			var bbox_height = (+elementproperties.e_height + +elementproperties.e_margin_t + +elementproperties.e_margin_b + +elementproperties.e_padding_t + +elementproperties.e_padding_b);
+			var bbox_width = +$bbox_back.css('width').split("px")[0],
+				bbox_height = +$bbox_back.css('height').split("px")[0];
 
-				// Position Top Left "tl" Anchor
-				$bbox_anchor_tl.css({
-					"left":"-3"+"px",
-					"top":"-3"+"px",
-				});
-		
-				// Position Top Middle "tm" Anchor
-				$bbox_anchor_tm.css({
-					"left":bbox_width*0.5 + -"6"+"px",
-					"top":"-3"+"px",
-				});
-		
-				// Position Top Right "tr" Anchor
-				$bbox_anchor_tr.css({
-					"left":bbox_width + -"6"+"px",
-					"top":"-3"+"px",
-				});
-		
-				// Position Right Middle "rm" Anchor
-				$bbox_anchor_rm.css({
-					"left":bbox_width + -"6"+"px",
-					"top":bbox_height*0.5+ -"6" +"px",
-				});
-		
-				// Position Left Middle "lm" Anchor
-				$bbox_anchor_lm.css({
-					"left":"-3"+"px",
-					"top":bbox_height*0.5+ -"6" +"px",
-				});
-		
-				// Position Bottom Right "br" Anchor
-				$bbox_anchor_br.css({
-					"left":bbox_width + -"6"+"px",
-					"top":bbox_height+ -"6" +"px",
-				});
-		
-				// Position Bottom Middle "bm" Anchor
-				$bbox_anchor_bm.css({
-					"left":bbox_width*0.5 + -"6"+"px",
-					"top":bbox_height+ -"6" +"px",
-				});
-		
-				// Position Bottom Left "bl" Anchor
-				$bbox_anchor_bl.css({
-					"left":"-3"+"px",
-					"top":bbox_height+ -"6" +"px",
-				});
-			}
+
+			// Position Top Left "tl" Anchor
+			$bbox_anchor_tl.css({
+				"left":"-3"+"px",
+				"top":"-3"+"px",
+			});
+	
+			// Position Top Middle "tm" Anchor
+			$bbox_anchor_tm.css({
+				"left":bbox_width*0.5 + -"6"+"px",
+				"top":"-3"+"px",
+			});
+	
+			// Position Top Right "tr" Anchor
+			$bbox_anchor_tr.css({
+				"left":bbox_width + -"6"+"px",
+				"top":"-3"+"px",
+			});
+	
+			// Position Right Middle "rm" Anchor
+			$bbox_anchor_rm.css({
+				"left":bbox_width + -"6"+"px",
+				"top":bbox_height*0.5+ -"6" +"px",
+			});
+	
+			// Position Left Middle "lm" Anchor
+			$bbox_anchor_lm.css({
+				"left":"-3"+"px",
+				"top":bbox_height*0.5+ -"6" +"px",
+			});
+	
+			// Position Bottom Right "br" Anchor
+			$bbox_anchor_br.css({
+				"left":bbox_width + -"6"+"px",
+				"top":bbox_height+ -"6" +"px",
+			});
+	
+			// Position Bottom Middle "bm" Anchor
+			$bbox_anchor_bm.css({
+				"left":bbox_width*0.5 + -"6"+"px",
+				"top":bbox_height+ -"6" +"px",
+			});
+	
+			// Position Bottom Left "bl" Anchor
+			$bbox_anchor_bl.css({
+				"left":"-3"+"px",
+				"top":bbox_height+ -"6" +"px",
+			});
+		}
 
 
 		// Margin BBox Static Behavoir
@@ -365,19 +398,41 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		// Bbox Dynamic Behavoir 
 
-		EditElement($bbox_anchor_bm,"margin-bottom");
-		EditElement($bbox_anchor_tm,"margin-top");
-		EditElement($bbox_anchor_lm,"margin-left");
-		EditElement($bbox_anchor_rm,"margin-right");
+		// Change Height & Width
+		if (type == "height" || type == "width"){
+			EditElement($bbox_anchor_bm,"height","y",-1);
+			EditElement($bbox_anchor_tm,"height","y",+1);
+			EditElement($bbox_anchor_lm,"width","x",+1);
+			EditElement($bbox_anchor_rm,"width","x",-1);
+		}
 
-		function EditElement(selected_anchor,selected_property) {
+		// Change Element Margin
+		if (type == "margin"){
+			EditElement($bbox_anchor_bm,"margin-bottom","y",-1);
+			EditElement($bbox_anchor_tm,"margin-top","y",+1);
+			EditElement($bbox_anchor_lm,"margin-left","x",+1);
+			EditElement($bbox_anchor_rm,"margin-right","x",-1);
+		}
+
+		// Change Element Padding
+		if (type == "padding") {
+			EditElement($bbox_anchor_bm,"padding-bottom","y",-1);
+			EditElement($bbox_anchor_tm,"padding-top","y",+1);
+			EditElement($bbox_anchor_lm,"padding-left","x",+1);
+			EditElement($bbox_anchor_rm,"padding-right","x",-1);
+		}
+
+
+		function EditElement(selected_anchor,selected_property,axis,direction) {
 			selected_anchor.mousedown(function(e) {
 				e.preventDefault();
-				$bbox_back.css('border-color','blue');
-				Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
 				var last_position = ({});
 
 				$(document).mousemove(function(e) {
+
+					$bbox_back.css('border-color','blue');
+					Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
+					
 					//check to make sure there is data to compare against
 					if (last_position.x !== undefined) {
 
@@ -390,43 +445,21 @@ function Twyg_bound(e_input,p_input,u_input) {
 						var deltaX = last_position.x - e.clientX,
 							deltaY = last_position.y - e.clientY;
 
-						if (deltaY >= 0){
-							if (selected_property == "margin-bottom") {
-								change("margin-bottom",-1);
+						if (axis == "x") {
+							if (deltaX >= 0){
+								change(selected_property,direction);
 							}
-
-							if (selected_property == "margin-top") {
-								change("margin-top",+1);
-							}
-
-						}
-
-						if (deltaY < 0){
-							if (selected_property == "margin-bottom") {
-								change("margin-bottom",+1);
-							}
-							if (selected_property == "margin-top") {
-								change("margin-top",-1);
+							if (deltaX < 0){
+								change(selected_property,-direction);
 							}
 						}
 
-						if (deltaX >= 0){
-							if (selected_property == "margin-right") {
-								change("margin-right",-1);
+						if (axis == "y") {
+							if (deltaY >= 0){
+								change(selected_property,direction);
 							}
-
-							if (selected_property == "margin-left") {
-								change("margin-left",+1);
-							}
-
-						}
-
-						if (deltaX < 0){
-							if (selected_property == "margin-right") {
-								change("margin-right",+1);
-							}
-							if (selected_property == "margin-left") {
-								change("margin-left",-1);
+							if (deltaY < 0){
+								change(selected_property,-direction);
 							}
 						}
 						
@@ -456,7 +489,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 					// Refresh Anchor Positions
 					PositionBbox($elementproperties);
-					PositionAnchors($elementproperties);
+					PositionAnchors();
 
 					// set position for next time
 					last_position = {
