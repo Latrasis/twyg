@@ -414,11 +414,12 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 					"width":"auto",
 					"height":"15px",
 					"margin":"0px",
-					"padding":"5px",
+					"padding":"4px 7px",
 					"background-color":"#999",
 					"color":"#000",
 					"font-size":"12px",
-					"font-family":"monospace"
+					"font-family":"monospace",
+					"border-radius":"2px"
 				});
 			},
 			position:function(e) {
@@ -490,8 +491,8 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 						var deltaX = last_position.x - e.clientX,
 							deltaY = last_position.y - e.clientY;
 
-						if (axis == "x") {
-							if (deltaX >= 0){
+						if (axis === "x") {
+							if (deltaX > 0){
 								change(selected_property,direction);
 							}
 							if (deltaX < 0){
@@ -499,8 +500,8 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 							}
 						}
 
-						if (axis == "y") {
-							if (deltaY >= 0){
+						if (axis === "y") {
+							if (deltaY > 0){
 								change(selected_property,direction);
 							}
 							if (deltaY < 0){
