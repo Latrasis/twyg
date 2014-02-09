@@ -238,7 +238,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 				});
 			}
 
-			// Construct BBox for Margin
+			// Construct BBox for Padding
 			if (type == "padding") {
 				$bbox_back.css({
 					"box-sizing":"border-box",
@@ -316,8 +316,6 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		// Position the Anchors
 
-		PositionAnchors();
-
 		function PositionAnchors() {
 
 			var bbox_width = +$bbox_back.css('width').split("px")[0],
@@ -373,6 +371,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 			});
 		}
 
+		PositionAnchors();
 
 		// Margin BBox Static Behavoir
 		$("#twyg_bbox div")
@@ -396,7 +395,44 @@ function Twyg_bound(e_input,p_input,u_input) {
 				}
 			);
 
-		// Bbox Dynamic Behavoir 
+/********************Bounding-Box-Behavoir**********************
+
+This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in General
+
+****************************************************************/
+
+		// Editing Mouse Panel Behavoir
+		var $mousepanel = {
+			add:function() {
+				$("#twyg").prepend('<div id="mousepanel"></div>');
+			},
+			remove:function() {
+				$("#mousepanel").remove();
+			},
+			style:function() {
+				$("#mousepanel").css({
+					"width":"auto",
+					"height":"15px",
+					"margin":"0px",
+					"padding":"5px",
+					"background-color":"#999",
+					"color":"#000",
+					"font-size":"12px",
+					"font-family":"monospace"
+				});
+			},
+			position:function(e) {
+				$("#mousepanel").css({
+					"position":"absolute",
+					"left":+e.clientX +15 + "px",
+					"top":+e.clientY + "px",
+				});
+			},
+			context:function(info) {
+				$("#mousepanel").text(info);
+			},
+		};
+
 
 		// Change Height & Width
 		if (type == "height" || type == "width"){
@@ -422,19 +458,28 @@ function Twyg_bound(e_input,p_input,u_input) {
 			EditElement($bbox_anchor_rm,"padding-right","x",-1);
 		}
 
-
+		// Dynamic Behavoir 
 		function EditElement(selected_anchor,selected_property,axis,direction) {
 			selected_anchor.mousedown(function(e) {
+				// Prevent Defaults
 				e.preventDefault();
+				// Toggle Mouse Panel
+				$mousepanel.add();
+				$mousepanel.style();
+				$mousepanel.position(e);
+				// Set Position
 				var last_position = ({});
 
 				$(document).mousemove(function(e) {
 
 					$bbox_back.css('border-color','blue');
 					Anchors_css({"border" :"solid 1px rgba(0,0,255,0.8)"});
-					
+
 					//check to make sure there is data to compare against
 					if (last_position.x !== undefined) {
+
+						// Set Mouse Panel Position
+						$mousepanel.position(e);
 
 						var change = function(selected_property,changeby) {
 							var i = +$element.css(selected_property).split("px")[0] + changeby + "px";
@@ -491,6 +536,10 @@ function Twyg_bound(e_input,p_input,u_input) {
 					PositionBbox($elementproperties);
 					PositionAnchors();
 
+					// Set Mouse Panel Info
+					$mousepanel.context(selected_property + " : " + $element.css(selected_property));
+
+
 					// set position for next time
 					last_position = {
 						x : e.clientX,
@@ -501,12 +550,17 @@ function Twyg_bound(e_input,p_input,u_input) {
 				});
 
 				$(document).mouseup(function(e){
+					// Unbind MouseMove
 					$(document).unbind('mousemove');
+					// Toggle Mouse Panel
+					$mousepanel.remove();
+					// Reset BBox Style
 					$bbox_back.css('border-color','#333');
 					Anchors_css({"border" :"solid 1px rgba(33,33,33,0.8)"});
 				});
 			});
 		}
+
 
 	}
 	
