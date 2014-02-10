@@ -7,7 +7,12 @@
  *
  * Date: 2014-02-04
  */
-
+ 
+// ******* Small Dependency Functions with Jquery ******* //
+// Find Css Value
+jQuery.fn.cssFloat = function (prop) {
+    return parseFloat(this.css(prop)) || 0;
+};
 
 // ******* Styling ******* //
 
@@ -158,7 +163,7 @@ function Twyg_bound(e_input,p_input,u_input) {
 			$unit == "pc" ||
 			$unit == "mm" ||
 			$unit == "cm" ||
-			$unit == "in")) { $unit = "px";}
+			$unit == "in")) {$unit = "px";}
 
 	// Retrieve Element Properties
 
