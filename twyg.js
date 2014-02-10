@@ -7,7 +7,7 @@
  *
  * Date: 2014-02-04
  */
- 
+
 // ******* Small Dependency Functions with Jquery ******* //
 // Find Css Value
 jQuery.fn.cssFloat = function (prop) {
@@ -168,18 +168,18 @@ function Twyg_bound(e_input,p_input,u_input) {
 	// Retrieve Element Properties
 
 	var $elementproperties = {
-		e_width:$element.css("width").split("px")[0],
-		e_height:$element.css("height").split("px")[0],
+		e_width:$element.cssFloat("width"),
+		e_height:$element.cssFloat("height"),
 
-		e_margin_t:$element.css("margin-top").split("px")[0],
-		e_margin_r:$element.css("margin-right").split("px")[0],
-		e_margin_b:$element.css("margin-bottom").split("px")[0],
-		e_margin_l:$element.css("margin-left").split("px")[0],
+		e_margin_t:$element.cssFloat("margin-top"),
+		e_margin_r:$element.cssFloat("margin-right"),
+		e_margin_b:$element.cssFloat("margin-bottom"),
+		e_margin_l:$element.cssFloat("margin-left"),
 
-		e_padding_t:$element.css("padding-top").split("px")[0],
-		e_padding_r:$element.css("padding-right").split("px")[0],
-		e_padding_b:$element.css("padding-bottom").split("px")[0],
-		e_padding_l:$element.css("padding-left").split("px")[0],
+		e_padding_t:$element.cssFloat("padding-top"),
+		e_padding_r:$element.cssFloat("padding-right"),
+		e_padding_b:$element.cssFloat("padding-bottom"),
+		e_padding_l:$element.cssFloat("padding-left"),
 
 		// Retrieve Element Position
 		e_top:$element.offset().top,
@@ -334,8 +334,8 @@ function Twyg_bound(e_input,p_input,u_input) {
 
 		function PositionAnchors() {
 
-			var bbox_width = +$bbox_back.css('width').split("px")[0],
-				bbox_height = +$bbox_back.css('height').split("px")[0];
+			var bbox_width = +$bbox_back.cssFloat('width'),
+				bbox_height = +$bbox_back.cssFloat('height');
 
 
 			// Position Top Left "tl" Anchor
@@ -504,7 +504,7 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 						$mousepanel.position(e);
 
 						var change = function(selected_property,changeby) {
-							var i = +$element.css(selected_property).split("px")[0] + changeby + "px";
+							var i = +$element.cssFloat(selected_property) + changeby + "px";
 							$element.css(selected_property,i);
 						};
 
@@ -534,18 +534,18 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 
 					// Update Element's Properties
 					var $elementproperties = {
-						e_width:$element.css("width").split("px")[0],
-						e_height:$element.css("height").split("px")[0],
+						e_width:$element.cssFloat("width"),
+						e_height:$element.cssFloat("height"),
 
-						e_margin_t:$element.css("margin-top").split("px")[0],
-						e_margin_r:$element.css("margin-right").split("px")[0],
-						e_margin_b:$element.css("margin-bottom").split("px")[0],
-						e_margin_l:$element.css("margin-left").split("px")[0],
+						e_margin_t:$element.cssFloat("margin-top"),
+						e_margin_r:$element.cssFloat("margin-right"),
+						e_margin_b:$element.cssFloat("margin-bottom"),
+						e_margin_l:$element.cssFloat("margin-left"),
 
-						e_padding_t:$element.css("padding-top").split("px")[0],
-						e_padding_r:$element.css("padding-right").split("px")[0],
-						e_padding_b:$element.css("padding-bottom").split("px")[0],
-						e_padding_l:$element.css("padding-left").split("px")[0],
+						e_padding_t:$element.cssFloat("padding-top"),
+						e_padding_r:$element.cssFloat("padding-right"),
+						e_padding_b:$element.cssFloat("padding-bottom"),
+						e_padding_l:$element.cssFloat("padding-left"),
 
 						// Retrieve Element Position
 						e_top:$element.offset().top,
