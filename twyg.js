@@ -149,6 +149,17 @@ function Twyg_bound(e_input,p_input,u_input) {
 	var $property = p_input;
 	var $unit = u_input;
 
+	// Check if Input is Included (if not valid default to "px")
+	if (!($unit == "px" ||
+			$unit == "%" ||
+			$unit == "em" ||
+			$unit == "ex" ||
+			$unit == "pt" ||
+			$unit == "pc" ||
+			$unit == "mm" ||
+			$unit == "cm" ||
+			$unit == "in")) { $unit = "px";}
+
 	// Retrieve Element Properties
 
 	var $elementproperties = {
