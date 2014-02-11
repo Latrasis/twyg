@@ -9,10 +9,26 @@
  */
 
 // ******* Small Dependency Functions with Jquery ******* //
-// Find Css Value
+
+// Find Css Float Value
 jQuery.fn.cssFloat = function (prop) {
     return parseFloat(this.css(prop)) || 0;
 };
+
+// Find Css Integer Value
+jQuery.fn.cssInt = function (prop) {
+    return parseInt(this.css(prop),10) || 0;
+};
+
+// Rotate Css with Transformed Origin
+jQuery.fn.rotate = function(degrees) {
+    $(this).css({'-webkit-transform' : 'rotate('+ degrees +'rad)',
+                '-moz-transform' : 'rotate('+ degrees +'rad)',
+                '-ms-transform' : 'rotate('+ degrees +'rad)',
+                'transform' : 'rotate('+ degrees +'rad)',
+    			'transformOrigin':"left top"});
+};
+
 
 // ******* Styling ******* //
 
@@ -43,8 +59,18 @@ var $bbox_anchor_styles = {
 	"border":"solid 1px rgba(33,33,33,0.8)"
 };
 
+// Ruler Style
+
+var $ruler_styles = {
+	"position":"absolute",
+	"background-color":"#f00",
+	"border":"solid 1px #eee",
+	"height":"1px"
+};
+
 function style_console() {$("#twyg_console").css($console_styles);}
 function style_anchors() {$("#twyg_bbox").css($bbox_anchor_styles);}
+function style_ruler() {$("#twyg_ruler").css($ruler_styles);}
 
 // Adding Twyg to the Body
 
@@ -105,6 +131,7 @@ Then Pass the element to the Bounding-Box-Maker Function
 
 function Twyg_parse(input) {
 
+	// Bounding Box Parse
 	if (
 		// A Property is Defined and...
 		input.indexOf("{") != -1 
@@ -130,6 +157,14 @@ function Twyg_parse(input) {
 
 	}
 
+	//// Check for Tools
+	// Check for Ruler
+	if (input == "ruler" || input == "Ruler") {
+		// Hide Console
+			$('#twyg_console').toggle();
+		return Twyg_ruler();
+	}
+
 	// Again For Now For Everything Else We Simply Respond With a "Nope" Animation
 	// Future Versions should have a more wide range of responses
 	else {
@@ -140,6 +175,112 @@ function Twyg_parse(input) {
 	}
 }
 
+
+/*********** Mouse Panel (Pops next to the mouse) **************/
+
+var $mousepanel = {
+
+	add:function() {
+		$("#twyg").prepend('<div id="mousepanel"></div>');
+	},
+	remove:function() {
+		$("#mousepanel").remove();
+	},
+	style:function() {
+		$("#mousepanel").css({
+			"width":"auto",
+			"height":"15px",
+			"margin":"0px",
+			"padding":"4px 7px",
+			"background-color":"#999",
+			"color":"#000",
+			"font-size":"12px",
+			"font-family":"monospace",
+			"border-radius":"2px"
+		});
+	},
+	color:function(type) {
+		if (type == "margin") {$("#mousepanel").css('background-color',"yellow");}
+		if (type == "padding") {$("#mousepanel").css('background-color',"red");}
+	},
+	position:function(e) {
+		$("#mousepanel").css({
+			"position":"absolute",
+			"left":+e.clientX +15 + "px",
+			"top":+e.clientY + "px",
+		});
+	},
+
+	context:function(info) {
+		$("#mousepanel").text(info);
+	},
+};
+
+/************************ Twyg-Tools ***************************/
+
+// Ruler (v.0.1)
+
+function Twyg_ruler() {
+	$(document).mousedown(function(e) {
+		// Prevent Defaults
+		e.preventDefault();
+
+		// Create Ruler
+		$('#twyg').append('<div id="twyg_ruler"></div>');
+		$ruler = $('#twyg_ruler');
+
+		// Style Ruler
+		style_ruler();
+
+		// Toggle Mouse Panel
+		$mousepanel.add();
+		$mousepanel.style();
+		$mousepanel.position(e);
+
+		// Set Start Point
+		var start_x = e.pageX,
+			start_y = e.pageY;
+
+		// Set Ruler First Position
+		$ruler.css({"left":start_x,"top":start_y});
+
+		$(document).mousemove(function(e) {	
+
+			// Position MousePanel
+			$mousepanel.position(e);
+
+			// Set End Point
+			var end_x = e.pageX,
+				end_y = e.pageY;
+
+			// Set Difference
+			var change_x = end_x - start_x,
+				change_y = end_y - start_y;
+			
+			var squared_x = change_x*change_x,
+				squared_y = change_y*change_y;
+
+			// Set ruler Length
+			var ruler_length = Math.sqrt(squared_x + squared_y);
+
+			// Set Ruler Angle
+			var ruler_angle = Math.atan(change_y/change_x);
+
+			$ruler.css("width",ruler_length + "px");
+			$ruler.rotate(ruler_angle);
+
+			$mousepanel.context(ruler_length + "px");
+		
+		});
+
+		$(document).mouseup(function(e){
+			// Unbind MouseMove
+			$(document).unbind('mousemove');
+			// Toggle Mouse Panel
+			$mousepanel.remove();
+		});
+	});
+}
 
 /********************Bounding-Box-Creation**********************
 
@@ -155,15 +296,15 @@ function Twyg_bound(e_input,p_input,u_input) {
 	var $unit = u_input;
 
 	// Check if Input is Included (if not valid default to "px")
-	if (!($unit == "px" ||
-			$unit == "%" ||
-			$unit == "em" ||
-			$unit == "ex" ||
-			$unit == "pt" ||
-			$unit == "pc" ||
-			$unit == "mm" ||
-			$unit == "cm" ||
-			$unit == "in")) {$unit = "px";}
+		if (!($unit == "px" ||
+				$unit == "%" ||
+				$unit == "em" ||
+				$unit == "ex" ||
+				$unit == "pt" ||
+				$unit == "pc" ||
+				$unit == "mm" ||
+				$unit == "cm" ||
+				$unit == "in")) {$unit = "px";}
 
 	// Retrieve Element Properties
 
@@ -417,44 +558,6 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 
 ****************************************************************/
 
-		// Editing Mouse Panel Behavoir
-		var $mousepanel = {
-			add:function() {
-				$("#twyg").prepend('<div id="mousepanel"></div>');
-			},
-			remove:function() {
-				$("#mousepanel").remove();
-			},
-			style:function() {
-				$("#mousepanel").css({
-					"width":"auto",
-					"height":"15px",
-					"margin":"0px",
-					"padding":"4px 7px",
-					"background-color":"#999",
-					"color":"#000",
-					"font-size":"12px",
-					"font-family":"monospace",
-					"border-radius":"2px"
-				});
-			},
-			color:function(type) {
-				if (type == "margin") {$("#mousepanel").css('background-color',"yellow");}
-				if (type == "padding") {$("#mousepanel").css('background-color',"red");}
-			},
-			position:function(e) {
-				$("#mousepanel").css({
-					"position":"absolute",
-					"left":+e.clientX +15 + "px",
-					"top":+e.clientY + "px",
-				});
-			},
-
-			context:function(info) {
-				$("#mousepanel").text(info);
-			},
-		};
-
 
 		// Change Height & Width
 		if (type == "height" || type == "width"){
@@ -485,10 +588,33 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 			selected_anchor.mousedown(function(e) {
 				// Prevent Defaults
 				e.preventDefault();
+
+				// Find Side Type
+				var selected_side = selected_property.split("-")[1];
+
+				// Find what oreintation is needed from parent: either Height or Width
+				if (selected_side == "left" || selected_side == "right") {
+					var parentsize = +$element.parent().width();
+					}
+				if (selected_side == "top" || selected_side == "bottom") {
+					var parentsize = +$element.parent().height();
+					}
+
+				// Find Property's Initial Unit
+				var initialunit = function(selected_property) {
+					var n = ""+ $element.cssFloat(selected_property),
+						iu = $element.css(selected_property).split(n)[1];
+					return iu;
+				};
+
+				var $sideunit = initialunit(selected_property);
+
+
 				// Toggle Mouse Panel
 				$mousepanel.add();
 				$mousepanel.style();
 				$mousepanel.position(e);
+
 				// Set Position
 				var last_position = ({});
 
@@ -504,7 +630,22 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 						$mousepanel.position(e);
 
 						var change = function(selected_property,changeby) {
-							var i = +$element.cssFloat(selected_property) + changeby + "px";
+
+							// If unit is "px" go with default
+							if ($unit == "px"){var i = +$element.cssInt(selected_property) + changeby + $unit;}
+
+							// If unit is "%" do conversion
+							if ($unit == "%"){
+								var p = (+$element.cssFloat(selected_property)/+parentsize)*100;
+								var m = parseInt(p,10);
+								var i = m + changeby + $unit;
+							}
+
+							// Set Mouse Panel Info
+							$mousepanel.context(selected_property + " : " + i);
+							// Set Mouse Panel Color
+							// $mousepanel.color(type);
+							
 							$element.css(selected_property,i);
 						};
 
@@ -558,12 +699,6 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 					PositionBbox($elementproperties);
 					PositionAnchors();
 
-					// Set Mouse Panel Info
-					$mousepanel.context(selected_property + " : " + $element.css(selected_property));
-					// Set Mouse Panel Color
-					// $mousepanel.color(type);
-
-
 					// set position for next time
 					last_position = {
 						x : e.clientX,
@@ -584,11 +719,7 @@ This is where Bounding Box Behavoir is Made as well as Dynamic Behavoir in Gener
 				});
 			});
 		}
-
-
 	}
-	
-
 }
 
 
