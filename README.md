@@ -35,8 +35,8 @@ At least my answer was - an unbiased based js script - or Twyg.
   * Height/Width
 
 ####Ruler Tool (v.0.1)
-*Can be called from the twyg console using "ruler" keyword
-*Allows to measure distances from mouseclick to mousedrag
+* Can be called from the twyg console using "ruler" keyword
+* Allows to measure distances from mouseclick to mousedrag
 
 
 
