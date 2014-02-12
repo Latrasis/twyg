@@ -1,15 +1,8 @@
 
-#Sorry Folks!
-
-As of now it's not ready yet ...even for a demo :(
-
-
-===
-##T.W.Y.G 
-
+##T.W.Y.G
 
 ====
->Tweak What You Get Editor
+>Tweak What You Get Editor (v.0.1)
 
 
 ###What is Twyg?
@@ -28,16 +21,25 @@ At least my answer was - an unbiased based js script - or Twyg.
 
 ###Features
 
-* Uhh...none?
-* Ok..well you can technically make bounding boxes right now for a selected element
+####Twyg Console (v.0.1)
+	* Is toggled with Shift + p
+	* Allows to initiate features such as the bounding tool and ruler
+	* Will have Copy/Paste Feature in future versions
 
-###How to Use
+####Bounding Tool (v.0.2)
 
-* First you need to link twyg.js
-* To Select an Element you need to input it into the Twyg console. To open it Press Capital ***"P"*** and ***"Esc"*** to close.
-* For element selection its starts like Jquery.
-* For Property Selection use "{"
-* For ex: #box1{margin
+	* Allows to select an element and to change a given property dynamically
+	* To use add the "{" key after element ex:(#box{margin)
+	* Current Properties Available: 
+		* Margin
+		* Padding
+		* Height/Width
+
+####Ruler Tool (v.0.1)
+	*Can be called from the twyg console using "ruler" keyword
+	*Allows to measure distances from mouseclick to mousedrag
+
+
 
 
 
