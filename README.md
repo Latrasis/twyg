@@ -1,7 +1,6 @@
 
 ##T.W.Y.G
 
-====
 >Tweak What You Get Editor (v.0.1)
 
 
