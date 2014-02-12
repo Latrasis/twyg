@@ -30,9 +30,9 @@ At least my answer was - an unbiased based js script - or Twyg.
 * Allows to select an element and to change a given property dynamically
 * To use add the "{" key after element ex:(#box{margin)
 * Current Properties Available: 
-..* Margin
-..* Padding
-..* Height/Width
+  * Margin
+  * Padding
+  * Height/Width
 
 ####Ruler Tool (v.0.1)
 *Can be called from the twyg console using "ruler" keyword
