@@ -21,22 +21,22 @@ At least my answer was - an unbiased based js script - or Twyg.
 ###Features
 
 ####Twyg Console (v.0.1)
-	* Is toggled with Shift + p
-	* Allows to initiate features such as the bounding tool and ruler
-	* Will have Copy/Paste Feature in future versions
+* Is toggled with Shift + p
+* Allows to initiate features such as the bounding tool and ruler
+* Will have Copy/Paste Feature in future versions
 
 ####Bounding Tool (v.0.2)
 
-	* Allows to select an element and to change a given property dynamically
-	* To use add the "{" key after element ex:(#box{margin)
-	* Current Properties Available: 
-		* Margin
-		* Padding
-		* Height/Width
+* Allows to select an element and to change a given property dynamically
+* To use add the "{" key after element ex:(#box{margin)
+* Current Properties Available: 
+..* Margin
+..* Padding
+..* Height/Width
 
 ####Ruler Tool (v.0.1)
-	*Can be called from the twyg console using "ruler" keyword
-	*Allows to measure distances from mouseclick to mousedrag
+*Can be called from the twyg console using "ruler" keyword
+*Allows to measure distances from mouseclick to mousedrag
 
 
 
