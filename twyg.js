@@ -12,20 +12,12 @@ require.config({
 	paths: {
 		"jquery": "bower_components/jquery/jquery",
 		"mousetrap": "bower_components/mousetrap/mousetrap",
+		"dep": "lib/dep",
+		"style":"lib/styles",
 	}
 });
 
-require('Twyg',
-	['lib/dep',
-	'lib/styles',
-	'lib/tools/mousepanel',
-	'lib/tools/ruler',
-	'lib/console','lib/bbox'],
-
-	function(twyg) {
-
-
-
+require(["lib/console"], function(console) {
 
 });
 
