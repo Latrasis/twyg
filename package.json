@@ -1,0 +1,22 @@
+{
+  "author": "Jacob Payne",
+  "name": "twyg",
+  "description": "Developer Client-Side Command Tool",
+  "version": "0.1",
+  "repository": {
+    "url": "https://github.com/Latrasis/twyg/tree/beta"
+  },
+  "main": "./lib/twyg",
+  "keywords": [
+    "twyg",
+    "style",
+    "tool"
+  ],
+  "bin": {
+    "twyg": "./bin/twyg"
+  },
+  "dependencies": {"jquery"},
+  "engines": {
+    "node": "*"
+  }
+}
