@@ -1,21 +1,37 @@
 {
-  "author": "Jacob Payne",
   "name": "twyg",
-  "description": "Developer Client-Side Command Tool",
-  "version": "0.1",
-  "repository": {
-    "url": "https://github.com/Latrasis/twyg/tree/beta"
-  },
+  "version": "0.0.3",
+  "description": "Developer Client-Side Command Too",
   "main": "./lib/twyg",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "jquery": "*",
+    "mousetrap": "*",
+    "jsdom": "*"
+  },
+  "devDependencies": {
+    "gulp": "^3.6.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Latrasis/twyg.git"
+  },
   "keywords": [
     "twyg",
     "style",
     "tool"
   ],
-  "bin": {
-    "twyg": "./bin/twyg"
+  "author": "Jacob Payne",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/Latrasis/twyg/issues"
   },
-  "dependencies": {"jquery"},
+  "homepage": "https://github.com/Latrasis/twyg",
   "engines": {
     "node": "*"
   }

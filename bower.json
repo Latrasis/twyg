@@ -1,0 +1,21 @@
+{
+  "name": "twygjs",
+  "version": "0.0.3",
+  "homepage": "https://github.com/Latrasis/twyg",
+  "authors": [
+    "Latrasis <jacobapayne@gmail.com>"
+  ],
+  "description": "Front-End Visual Tweaker Tool",
+  "main": "?",
+  "keywords": [
+    "twyg"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
