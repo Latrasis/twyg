@@ -12,7 +12,8 @@
     "jsdom": "*"
   },
   "devDependencies": {
-    "gulp": "^3.6.2"
+    "grunt": "*",
+    "grunt-browserify": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
