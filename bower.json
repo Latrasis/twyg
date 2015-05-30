@@ -4,6 +4,9 @@
   "authors": [
     "Latrasis <jacobapayne@gmail.com>"
   ],
+  "scripts": {
+  	"demo":"gulp"
+	},
   "description": "Tweak What You Get Editor",
   "license": "MIT"
 }

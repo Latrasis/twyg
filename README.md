@@ -14,7 +14,7 @@ With the coming of age WYWSIWYGS (Such as Google Web Designer, Macaw and Dreamwe
 
 From my insight - i came with the conclusion that what was mainly inticing about WYSIWYGS was that they provided a way to dynamically change element styling - an "ide" for the mouse.
 
-So what if i can edit my Css with my mouse but without sacrificing my existing workflow?
+So what if I can edit my Css with my mouse but without sacrificing my existing workflow?
 
 At least my answer was - an unbiased based js script - or Twyg.
 
