@@ -28,7 +28,7 @@ gulp.task('js-build', function () {
 
   function bundleShare(b) {
     b.bundle()
-      .pipe(source('twyg.min.js'))
+      .pipe(source('twyg.js'))
       .on('error', gutil.log)
       .pipe(gulp.dest('./dist/'));
   };
