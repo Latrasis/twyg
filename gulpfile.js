@@ -35,4 +35,8 @@ gulp.task('js-build', function () {
 
 });
 
-gulp.task('default', ['webserver', 'js-build']);
+gulp.task('watch', function() {
+  gulp.watch('./lib/*/*.js', ['js-build']);
+});
+
+gulp.task('default', ['webserver', 'watch', 'js-build']);

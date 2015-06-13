@@ -4,8 +4,9 @@
   "description": "Tweak What You Get Editor",
   "main": "./dist/twyg.js",
   "dependencies": {
+    "jquery": "^2.1.4",
     "jsdom": "^0.10.5",
-    "mousetrap": "^0.0.1"
+    "mousetrap": "0.0.1"
   },
   "devDependencies": {
     "browserify": "^9.0.7",
