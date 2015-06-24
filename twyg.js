@@ -593,14 +593,6 @@ var Twyg = (function() {
 					// Find Side Type
 					var selected_side = selected_property.split("-")[1];
 
-					// Find what oreintation is needed from parent: either Height or Width
-					if (selected_side == "left" || selected_side == "right") {
-						var parentsize = +$element.parent().width();
-						}
-					if (selected_side == "top" || selected_side == "bottom") {
-						var parentsize = +$element.parent().height();
-						}
-
 					// Find Property's Initial Unit
 					var initialunit = function(selected_property) {
 						var n = ""+ $element.cssFloat(selected_property),
